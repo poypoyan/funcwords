@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load set_disp_name autolink %}
+{% block title %} - {% lang_disp lang as disp_name %}{{ disp_name }}{% endblock %}
+{% block content %}
+{% lang_disp lang as disp_name %}
+<h1>{{ disp_name }}</h1>
+
+{% if lang.parentnode %}
+  <br/>
+  <b>Group:</b>&nbsp;
+  {% for k, v in lang.displaylinks %}
+    <a href="/{{ k }}">{{ v }}</a>
+    {% if not forloop.last %}&gt;{% endif %}
+  {% endfor %}
+  <br/>
+{% endif %}
+
+{% if lang.info %}
+  <br/>
+  {{ lang.info|safe }}
+  <br/>
+{% endif %}
+
+{% if refs %}
+  <br/>
+  <b>References:</b>
+  <br/><br/>
+  <ol>
+    {% for ref in refs %}
+      {% autolink ref.info as linked_info %}
+      <li>{{ linked_info|safe }}</li>
+    {% endfor %}
+  </ol>
+{% endif %}
+
+{% if lang_children %}{% if lang.nodetype == 0 or lang.nodetype == 2 %}
+  <br/>
+  <b>{% if lang.nodetype == 0 %}Dialects:{% else %}Members:{% endif %}</b>
+  <br/><br/>
+  <ul>
+    {% for lang_ch in lang_children %}
+      {% lang_disp_vals lang_ch as disp_name_ch %}
+      <li>
+        <a href="/{{ lang_ch.slug }}">{{ disp_name_ch }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}{% endif %}
+
+{% if lang.nodetype == 0 or lang.nodetype == 1 %}
+  <br/>
+  <b>Term Entries:</b>
+  <br/><br/>
+  <ul>
+    {% for term in terms %}
+      <li>
+        <a href="{{ term.slug }}">{{ term.name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+{% endblock %}

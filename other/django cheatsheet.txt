@@ -1,0 +1,44 @@
+New Project:
+django-admin startproject fwphl
+
+New App:
+python manage.py startapp fwapp
+
+Run Server:
+python manage.py runserver
+
+Migrate Models:
+python manage.py makemigrations
+python manage.py migrate
+
+Create Superuser:
+python manage.py createsuperuser
+
+Testing:
+python manage.py test
+
+Init steps:
+1) In MySQL server, run fwphl_init.sql
+2) In Django, migrate models
+3) In MySQL server, run fwphl_triggers.sql
+4) In Django, create superuser
+5) (Optional) Run tagalog_personal_pronouns_insert.sql for initial data
+
+Re-init steps before doing init steps above:
+1) In MySQL server, drop database.
+2) In Django, delete all .py files under fwApp/migrations except __init__.py.
+
+To view error 404 page (do this locally only!):
+1) In settings.py, set DEBUG = False and ALLOWED_HOSTS = ['*']. Remember the previous settings.
+2) Run server with "--insecure" flag to force Django to serve static files even on DEBUG = False.
+3) Test by typing a URL outside patterns coded in urls.py and urls_app.py.
+4) Afte testing, in settings.py, set DEBUG = True and apply previous settings.
+
+To view actual SQL query in views.py:
+1) print(sample_query.query)
+
+----
+
+Generate Models from Existing Database:
+python manage.py inspectdb > myApp/models.py
+GOTCHA: models.py should be saved to UTF-8!

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load autolink %}
+{% block title %} - {{ cat.displayname }}{% endblock %}
+{% block content %}
+<h1>{{ cat.displayname }}</h1>
+
+{% if cat.parentnode %}
+  <br/>
+  <b>Categories:</b>&nbsp;
+  {% for k, v in cat.displaylinks %}
+    <a href="/category/{{ k }}">{{ v }}</a>
+    {% if not forloop.last %}&gt;{% endif %}
+  {% endfor %}
+  <br/>
+{% endif %}
+
+{% if cat.info %}
+  <br/>
+  {{ cat.info|safe }}
+  <br/>
+{% endif %}
+
+{% if refs %}
+  <br/>
+  <b>References:</b>
+  <br/><br/>
+  <ol>
+    {% for ref in refs %}
+      {% autolink ref.info as linked_info %}
+      <li>{{ linked_info|safe }}</li>
+    {% endfor %}
+  </ol>
+{% endif %}
+{% endblock %}
