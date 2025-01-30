@@ -13,7 +13,7 @@ class LanguageNode(models.Model):
     # If node is dialect, please set a language as parent.
     # If node is language, please set a group as parent.
     name = models.CharField(db_column='Name', max_length=50)
-    nodetype = models.SmallIntegerField(db_column='NodeType')   # 0 = language, 1 = dialect, 2 = group
+    nodetype = models.SmallIntegerField(db_column='NodeType', help_text='0 = language, 1 = dialect, 2 = group')
     parentnode = models.ForeignKey('self', models.DO_NOTHING, db_column='ParentNode', blank=True, null=True)
     info = models.TextField(db_column='Info', blank=True, null=True)
     displayname = models.CharField(db_column='DisplayName', max_length=100, blank=True, null=True)

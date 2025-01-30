@@ -1,6 +1,4 @@
-fwapp/__pycache__/
+__pycache__/
 fwapp/migrations/
-fwapp/templatetags/__pycache__/
-fwphl/__pycache__/
 fwvenv/
 other/sec/

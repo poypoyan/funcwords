@@ -14,7 +14,7 @@ select 'Tagalog', 0, Id from Language_Node where Name = 'Tagalic';
 
 -- Sample Reference
 insert into Reference(Name, Info)
-values ('blust-gcp', 'Blust, R. (1991). The Greater Central Philippines Hypothesis. Oceanic Linguistics, 30(2), 73–129. https://doi.org/10.2307/3623084.');
+values ('blust-gcp', 'Blust, R. (1991). The Greater Central Philippines Hypothesis. <i>Oceanic Linguistics</i>, 30(2), 73–129. https://doi.org/10.2307/3623084.');
 
 insert into Language_Reference (Lang, Ref, DispIndex)
 select Language_Node.Id, Reference.Id, 0 from Language_Node

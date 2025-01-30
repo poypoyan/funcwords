@@ -1,7 +1,7 @@
 # funcwords
 Source code of *Function Words in Philippine Languages* (FWPHL) future website. Stack: Django, MySQL.
 
-### Development and testing with `venv`
+## Development and testing with `venv`
 Windows
 ```console
 git clone https://github.com/poypoyan/funcwords.git
