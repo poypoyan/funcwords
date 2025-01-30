@@ -5,7 +5,6 @@ from django.template import Context, Template
 
 class AutoLinkTest(SimpleTestCase):
     def test_autolink(self):
-        'The flatpage template tag retrieves all flatpages for an authenticated user'
         out = Template(
             '{% load autolink %}'
             '{% autolink text as test_out %}'
