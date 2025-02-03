@@ -4,7 +4,7 @@ Source code of *Function Words in Philippine Languages* (FWPHL) future website. 
 ## Development and testing with `venv`
 Windows
 ```console
-git clone https://github.com/poypoyan/funcwords.git
+git clone https://codeberg.org/poypoyan/funcwords.git
 cd funcwords
 python -m venv fwvenv
 fwvenv\Scripts\activate
@@ -14,7 +14,7 @@ Type `python` to run Python CLI, and type `deactivate` to exit the environment.
 
 Linux
 ```console
-git clone https://github.com/poypoyan/funcwords.git
+git clone https://codeberg.org/poypoyan/funcwords.git
 cd funcwords
 python3 -m venv fwvenv
 source fwvenv/bin/activate

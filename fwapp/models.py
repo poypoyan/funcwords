@@ -12,11 +12,11 @@ from django.db import models
 class LanguageNode(models.Model):
     # If node is dialect, please set a language as parent.
     # If node is language, please set a group as parent.
-    name = models.CharField(db_column='Name', max_length=50)
+    name = models.CharField(db_column='Name', max_length=50, help_text='If this is a dialect, don\'t include the language name anymore.')
     nodetype = models.SmallIntegerField(db_column='NodeType', help_text='0 = language, 1 = dialect, 2 = group')
     parentnode = models.ForeignKey('self', models.DO_NOTHING, db_column='ParentNode', blank=True, null=True)
     info = models.TextField(db_column='Info', blank=True, null=True)
-    displayname = models.CharField(db_column='DisplayName', max_length=100, blank=True, null=True)
+    displayname = models.CharField(db_column='DisplayName', max_length=50, blank=True, null=True)
     displaylinks = models.JSONField(db_column='DisplayLinks', blank=True, null=True)
     slug = models.SlugField(db_column='Slug')
 
@@ -28,7 +28,7 @@ class PropertyNode(models.Model):
     name = models.CharField(db_column='Name', max_length=50)
     parentnode = models.ForeignKey('self', models.DO_NOTHING, db_column='ParentNode', blank=True, null=True)
     info = models.TextField(db_column='Info', blank=True, null=True)
-    displayname = models.CharField(db_column='DisplayName', max_length=100, blank=True, null=True)
+    displayname = models.CharField(db_column='DisplayName', max_length=50, blank=True, null=True)
     displaylinks = models.JSONField(db_column='DisplayLinks', blank=True, null=True)
     slug = models.SlugField(db_column='Slug')
 
@@ -53,7 +53,9 @@ class TermProperty(models.Model):
 
     class Meta:
         db_table = 'term_property'
+        db_table_comment = "Associates a Term with a Property."
         unique_together = (('term', 'prop'),)
+        verbose_name_plural = "Term properties"
 
 
 class Reference(models.Model):
@@ -71,6 +73,7 @@ class LanguageReference(models.Model):
 
     class Meta:
         db_table = 'language_reference'
+        db_table_comment = "Associates a Language with a Reference."
         unique_together = (('lang', 'ref'),)
 
 
@@ -81,6 +84,7 @@ class PropertyReference(models.Model):
 
     class Meta:
         db_table = 'property_reference'
+        db_table_comment = "Associates a Property with a Reference."
         unique_together = (('prop', 'ref'),)
 
 
@@ -91,4 +95,5 @@ class TermReference(models.Model):
 
     class Meta:
         db_table = 'term_reference'
+        db_table_comment = "Associates a Term with a Reference."
         unique_together = (('term', 'ref'),)

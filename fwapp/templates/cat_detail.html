@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load set_disp_name autolink %}
+{% load autolink %}
 {% block title %} - {{ cat.displayname }}{% endblock %}
 {% block content %}
 <h1>{{ cat.displayname }}</h1>
@@ -51,9 +51,8 @@
   <br/><br/>
   <ul>
     {% for term in terms %}
-      {% lang_disp term.language__displayname term.language__name as lang_disp %}
       <li>
-        <a href="/{{ term.language__slug }}">{{ lang_disp }}</a>:
+        <a href="/{{ term.language__slug }}">{{ term.language__displayname }}</a>:
         <a href="/{{ term.language__slug }}/{{ term.slug }}">{{ term.name }}</a>
       </li>
     {% endfor %}

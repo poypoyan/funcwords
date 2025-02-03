@@ -1,9 +1,8 @@
 {% extends "base.html" %}
-{% load set_disp_name autolink %}
+{% load autolink %}
 {% block title %} - {{ term.name }}{% endblock %}
 {% block content %}
-{% lang_disp lang.displayname lang.name as lang_disp %}
-<a href="/{{ lang.slug }}" class="lang-back">&lt;&lt; {{ lang_disp }}</a>
+<a href="/{{ lang.slug }}" class="lang-back">&lt;&lt; {{ lang.displayname }}</a>
 <br/><br/>
 <h1>{{ term.name }}</h1>
 
@@ -29,7 +28,7 @@
 <b>References:</b>
 <br/><br/>
 <ol>
-  {% if lang.nodetype == 0 or lang.nodetype == 1 %}<li>{{ lang_disp }} speakers</li>{% endif %}
+  {% if lang.nodetype == 0 or lang.nodetype == 1 %}<li>{{ lang.displayname }} speakers</li>{% endif %}
   {% for ref in refs %}
     {% autolink ref.info as linked_info %}
     <li>{{ linked_info|safe }}</li>

@@ -1,9 +1,8 @@
 {% extends "base.html" %}
-{% load set_disp_name autolink %}
-{% block title %} - {% lang_disp lang.displayname lang.name as lang_disp %}{{ lang_disp }}{% endblock %}
+{% load autolink %}
+{% block title %} - {{ lang.displayname }}{% endblock %}
 {% block content %}
-{% lang_disp lang.displayname lang.name as lang_disp %}
-<h1>{{ lang_disp }}</h1>
+<h1>{{ lang.displayname }}</h1>
 
 {% if lang.parentnode %}
   <br/>
@@ -33,19 +32,18 @@
   </ol>
 {% endif %}
 
-{% if lang_children %}{% if lang.nodetype == 0 or lang.nodetype == 2 %}
+{% if lang_children %}
   <br/>
   <b>{% if lang.nodetype == 0 %}Dialects:{% else %}Members:{% endif %}</b>
   <br/><br/>
   <ul>
     {% for lang_ch in lang_children %}
-      {% lang_disp lang_ch.displayname lang_ch.name as lang_disp_ch %}
       <li>
-        <a href="/{{ lang_ch.slug }}">{{ lang_disp_ch }}</a>
+        <a href="/{{ lang_ch.slug }}">{{ lang_ch.name }}</a>
       </li>
     {% endfor %}
   </ul>
-{% endif %}{% endif %}
+{% endif %}
 
 {% if terms %}{% if lang.nodetype == 0 or lang.nodetype == 1 %}
   <br/>

@@ -16,7 +16,7 @@ def home(request):
     return render(request, 'home.html')
 
 def langs(request):
-    langs_query = models.LanguageNode.objects.values('name', 'displayname', 'slug').filter(Q(nodetype=0) | Q(nodetype=1))
+    langs_query = models.LanguageNode.objects.values('displayname', 'slug').filter(Q(nodetype=0) | Q(nodetype=1)).order_by('displayname')
     return render(request, 'langs.html', { 'langs': langs_query })
 
 def lang_detail(request, lang):
@@ -25,24 +25,24 @@ def lang_detail(request, lang):
     except models.LanguageNode.DoesNotExist:
         raise Http404
 
-    lang_children_query = models.LanguageNode.objects.values('name', 'displayname', 'slug').filter(parentnode=lang_query.id)
-    terms_query = models.Term.objects.values('name', 'slug').filter(language=lang_query.id)
-    refs_query = models.Reference.objects.order_by('languagereference__dispindex').values('info').filter(languagereference__lang=lang_query.id)
+    lang_children_query = models.LanguageNode.objects.values('name', 'slug').filter(parentnode=lang_query.id).order_by('name')
+    terms_query = models.Term.objects.values('name', 'slug').filter(language=lang_query.id).order_by('name')
+    refs_query = models.Reference.objects.values('info').filter(languagereference__lang=lang_query.id).order_by('languagereference__dispindex')
     return render(request, 'lang_detail.html', { 'lang': lang_query, 'lang_children': lang_children_query, 'terms': terms_query, 'refs': refs_query })
 
 def term_detail(request, lang, term):
     try:
-        lang_query = models.LanguageNode.objects.values('id', 'name', 'nodetype', 'displayname', 'slug').get(slug=lang)
+        lang_query = models.LanguageNode.objects.values('id', 'nodetype', 'displayname', 'slug').get(slug=lang)
         term_query = models.Term.objects.get(slug=term, language=lang_query['id'])
     except (models.LanguageNode.DoesNotExist, models.Term.DoesNotExist):
         raise Http404
 
-    props_query = models.PropertyNode.objects.order_by('termproperty__dispindex').values('name', 'displaylinks', 'slug').filter(termproperty__term=term_query.id)
-    refs_query = models.Reference.objects.order_by('termreference__dispindex').values('info').filter(termreference__term=term_query.id)
+    props_query = models.PropertyNode.objects.values('name', 'displaylinks', 'slug').filter(termproperty__term=term_query.id).order_by('termproperty__dispindex')
+    refs_query = models.Reference.objects.values('info').filter(termreference__term=term_query.id).order_by('termreference__dispindex')
     return render(request, 'term_detail.html', { 'lang': lang_query, 'term': term_query, 'props': props_query, 'refs': refs_query })
 
 def cats(request):
-    cats_query = models.PropertyNode.objects.values('name', 'displayname', 'slug')
+    cats_query = models.PropertyNode.objects.values('displayname', 'slug').order_by('displayname')
     return render(request, 'cats.html', { 'cats': cats_query })
 
 def cat_detail(request, cat):
@@ -51,9 +51,9 @@ def cat_detail(request, cat):
     except models.PropertyNode.DoesNotExist:
         raise Http404
 
-    cat_children_query = models.PropertyNode.objects.values('name', 'slug').filter(parentnode=cat_query.id)
-    terms_query = models.Term.objects.values('name', 'slug', 'language__displayname', 'language__name', 'language__slug').filter(termproperty__prop=cat_query.id)
-    refs_query = models.Reference.objects.order_by('propertyreference__dispindex').values('info').filter(propertyreference__prop=cat_query.id)
+    cat_children_query = models.PropertyNode.objects.values('name', 'slug').filter(parentnode=cat_query.id).order_by('name')
+    terms_query = models.Term.objects.values('name', 'slug', 'language__displayname', 'language__slug').filter(termproperty__prop=cat_query.id).order_by('name')
+    refs_query = models.Reference.objects.values('info').filter(propertyreference__prop=cat_query.id).order_by('propertyreference__dispindex')
     return render(request, 'cat_detail.html', { 'cat': cat_query, 'cat_children': cat_children_query, 'terms': terms_query, 'refs': refs_query })
 
 def random_term(_):

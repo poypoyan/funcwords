@@ -1,14 +1,12 @@
 {% extends "base.html" %}
-{% load set_disp_name %}
 {% block title %} - Languages{% endblock %}
 {% block content %}
 <h1>Languages</h1>
 <br/>
 <ul>
   {% for lang in langs %}
-    {% lang_disp lang.displayname lang.name as lang_disp %}
     <li>
-      <a href="/{{ lang.slug }}">{{ lang_disp }}</a>
+      <a href="/{{ lang.slug }}">{{ lang.displayname }}</a>
     </li>
   {% endfor %}
 </ul>
