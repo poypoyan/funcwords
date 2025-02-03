@@ -5,10 +5,6 @@
   text-decoration: none;
 }
 
-body {
-  background-color: white;
-}
-
 .topnav {
   position: fixed;
   width: 100%;
@@ -60,7 +56,6 @@ body {
 }
 
 main {
-  color: black;
   padding: 70px 50px;
 }
 main a:hover {
@@ -71,4 +66,19 @@ main ul {
 }
 main ol {
   list-style-position: inside;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #121212;
+  }
+  main {
+    color: white;
+  }
+  main a:link {
+    color: #5a7ad9;
+  }
+  main a:visited {
+    color: #c7a7e5;
+  }
 }

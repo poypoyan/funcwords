@@ -6,9 +6,9 @@
 <br/>
 <ul>
   {% for lang in langs %}
-    {% lang_disp_vals lang as disp_name %}
+    {% lang_disp lang.displayname lang.name as lang_disp %}
     <li>
-      <a href="/{{ lang.slug }}">{{ disp_name }}</a>
+      <a href="/{{ lang.slug }}">{{ lang_disp }}</a>
     </li>
   {% endfor %}
 </ul>

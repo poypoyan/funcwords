@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load autolink %}
+{% load set_disp_name autolink %}
 {% block title %} - {{ cat.displayname }}{% endblock %}
 {% block content %}
 <h1>{{ cat.displayname }}</h1>
@@ -30,5 +30,33 @@
       <li>{{ linked_info|safe }}</li>
     {% endfor %}
   </ol>
+{% endif %}
+
+{% if cat_children %}
+  <br/>
+  <b>Members:</b>
+  <br/><br/>
+  <ul>
+    {% for cat_ch in cat_children %}
+      <li>
+        <a href="/category/{{ cat_ch.slug }}">{{ cat_ch.name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+{% if terms %}
+  <br/>
+  <b>Term Entries:</b>
+  <br/><br/>
+  <ul>
+    {% for term in terms %}
+      {% lang_disp term.language__displayname term.language__name as lang_disp %}
+      <li>
+        <a href="/{{ term.language__slug }}">{{ lang_disp }}</a>:
+        <a href="/{{ term.language__slug }}/{{ term.slug }}">{{ term.name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
 {% endif %}
 {% endblock %}

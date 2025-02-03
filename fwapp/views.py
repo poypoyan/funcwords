@@ -51,8 +51,10 @@ def cat_detail(request, cat):
     except models.PropertyNode.DoesNotExist:
         raise Http404
 
+    cat_children_query = models.PropertyNode.objects.values('name', 'slug').filter(parentnode=cat_query.id)
+    terms_query = models.Term.objects.values('name', 'slug', 'language__displayname', 'language__name', 'language__slug').filter(termproperty__prop=cat_query.id)
     refs_query = models.Reference.objects.order_by('propertyreference__dispindex').values('info').filter(propertyreference__prop=cat_query.id)
-    return render(request, 'cat_detail.html', { 'cat': cat_query, 'refs': refs_query })
+    return render(request, 'cat_detail.html', { 'cat': cat_query, 'cat_children': cat_children_query, 'terms': terms_query, 'refs': refs_query })
 
 def random_term(_):
     terms_all = models.Term.objects.values_list('id', flat=True)
