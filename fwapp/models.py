@@ -16,8 +16,8 @@ class LanguageNode(models.Model):
     nodetype = models.SmallIntegerField(db_column='NodeType', help_text='0 = language, 1 = dialect, 2 = group')
     parentnode = models.ForeignKey('self', models.DO_NOTHING, db_column='ParentNode', blank=True, null=True)
     info = models.TextField(db_column='Info', blank=True, null=True)
-    displayname = models.CharField(db_column='DisplayName', max_length=50, blank=True, null=True)
-    displaylinks = models.JSONField(db_column='DisplayLinks', blank=True, null=True)
+    displayname = models.CharField(db_column='DisplayName', max_length=50)
+    displaylinks = models.JSONField(db_column='DisplayLinks')
     slug = models.SlugField(db_column='Slug')
 
     class Meta:
@@ -28,8 +28,8 @@ class PropertyNode(models.Model):
     name = models.CharField(db_column='Name', max_length=50)
     parentnode = models.ForeignKey('self', models.DO_NOTHING, db_column='ParentNode', blank=True, null=True)
     info = models.TextField(db_column='Info', blank=True, null=True)
-    displayname = models.CharField(db_column='DisplayName', max_length=50, blank=True, null=True)
-    displaylinks = models.JSONField(db_column='DisplayLinks', blank=True, null=True)
+    displayname = models.CharField(db_column='DisplayName', max_length=50)
+    displaylinks = models.JSONField(db_column='DisplayLinks')
     slug = models.SlugField(db_column='Slug')
 
     class Meta:
@@ -53,7 +53,7 @@ class TermProperty(models.Model):
 
     class Meta:
         db_table = 'term_property'
-        db_table_comment = "Associates a Term with a Property."
+        db_table_comment = "Associates a Property to a Term."
         unique_together = (('term', 'prop'),)
         verbose_name_plural = "Term properties"
 
@@ -73,7 +73,7 @@ class LanguageReference(models.Model):
 
     class Meta:
         db_table = 'language_reference'
-        db_table_comment = "Associates a Language with a Reference."
+        db_table_comment = "Associates a Reference to a Language."
         unique_together = (('lang', 'ref'),)
 
 
@@ -84,7 +84,7 @@ class PropertyReference(models.Model):
 
     class Meta:
         db_table = 'property_reference'
-        db_table_comment = "Associates a Property with a Reference."
+        db_table_comment = "Associates a Reference to a Property."
         unique_together = (('prop', 'ref'),)
 
 
@@ -95,5 +95,5 @@ class TermReference(models.Model):
 
     class Meta:
         db_table = 'term_reference'
-        db_table_comment = "Associates a Term with a Reference."
+        db_table_comment = "Associates a Reference to a Term."
         unique_together = (('term', 'ref'),)

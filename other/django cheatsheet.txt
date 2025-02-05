@@ -11,8 +11,11 @@ Migrate Models:
 python manage.py makemigrations
 python manage.py migrate
 
-Create Superuser:
+Create Superuser (Admin):
 python manage.py createsuperuser
+
+Change Admin Password:
+python manage.py changepassword <user_name>
 
 Testing:
 python manage.py test

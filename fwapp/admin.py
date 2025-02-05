@@ -9,6 +9,8 @@ class ForeignKeyDropDownDisp(ModelChoiceField):
 class TermForeignKeyDropDownDisp(ModelChoiceField):
     def label_from_instance(self, obj):
         return f'{obj.name}, {obj.language.name}'
+    
+# TODO: Vary required fields, exclude self in parent node properly
 
 # Register your models here.
 @admin.register(LanguageNode)
@@ -16,10 +18,11 @@ class LanguageNodeAdmin(admin.ModelAdmin):
     list_display = ('name', 'nodetype', 'parentnode__name')
     search_fields = ('name',)
     list_filter = ('nodetype', 'parentnode__name')
+    exclude = ('displayname', 'displaylinks', 'slug')
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'parentnode':
-            return ForeignKeyDropDownDisp(queryset=LanguageNode.objects.exclude(id=request.resolver_match.kwargs['object_id']))
+            return ForeignKeyDropDownDisp(queryset=LanguageNode.objects)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 @admin.register(PropertyNode)
@@ -27,10 +30,11 @@ class PropertyNodeAdmin(admin.ModelAdmin):
     list_display = ('name', 'parentnode__name')
     search_fields = ('name',)
     list_filter = ('name', 'parentnode__name')
+    exclude = ('displayname', 'displaylinks', 'slug')
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'parentnode':
-            return ForeignKeyDropDownDisp(queryset=PropertyNode.objects.exclude(id=request.resolver_match.kwargs['object_id']))
+            return ForeignKeyDropDownDisp(queryset=PropertyNode.objects)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 @admin.register(Term)
@@ -38,6 +42,7 @@ class TermAdmin(admin.ModelAdmin):
     list_display = ('name', 'language__name')
     search_fields = ('name',)
     list_filter = ('name', 'language__name')
+    exclude = ('slug',)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'language':
