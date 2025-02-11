@@ -28,6 +28,10 @@ for each row begin
 		select Name, DisplayLinks, Slug into prev_name, prev_json, prev_slug from Language_Node where id = new.ParentNode;
 		set new.DisplayLinks = json_array_append(prev_json, '$', json_array(prev_slug, prev_name));
 	end if;
+
+	if new.Info is null then
+		set new.Info = '';
+	end if;
 end//
 
 create trigger populate_lang_disps_bu before update on Language_Node
@@ -78,6 +82,10 @@ for each row begin
 		set new.DisplayName = concat(new.Name, ' ', prev_dispname),
 			new.DisplayLinks = json_array_append(prev_json, '$', json_array(prev_slug, prev_name));
 	end if;
+
+	if new.Info is null then
+		set new.Info = '';
+	end if;
 end//
 
 create trigger populate_prop_disps_bu before update on Property_Node
@@ -106,6 +114,10 @@ end//
 create trigger populate_term_slug_bi before insert on Term
 for each row begin
 	set new.Slug = lower(replace(new.Name, ' ', '-'));
+
+	if new.Info is null then
+		set new.Info = '';
+	end if;
 end//
 
 create trigger populate_term_slug_bu before update on Term

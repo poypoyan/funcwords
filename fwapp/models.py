@@ -15,7 +15,7 @@ class LanguageNode(models.Model):
     name = models.CharField(db_column='Name', max_length=50, help_text='If this is a dialect, don\'t include the language name anymore.')
     nodetype = models.SmallIntegerField(db_column='NodeType', help_text='0 = language, 1 = dialect, 2 = group')
     parentnode = models.ForeignKey('self', models.DO_NOTHING, db_column='ParentNode', blank=True, null=True)
-    info = models.TextField(db_column='Info', blank=True, null=True)
+    info = models.TextField(db_column='Info', blank=True)
     displayname = models.CharField(db_column='DisplayName', max_length=50)
     displaylinks = models.JSONField(db_column='DisplayLinks')
     slug = models.SlugField(db_column='Slug')
@@ -27,7 +27,7 @@ class LanguageNode(models.Model):
 class PropertyNode(models.Model):
     name = models.CharField(db_column='Name', max_length=50)
     parentnode = models.ForeignKey('self', models.DO_NOTHING, db_column='ParentNode', blank=True, null=True)
-    info = models.TextField(db_column='Info', blank=True, null=True)
+    info = models.TextField(db_column='Info', blank=True)
     displayname = models.CharField(db_column='DisplayName', max_length=50)
     displaylinks = models.JSONField(db_column='DisplayLinks')
     slug = models.SlugField(db_column='Slug')
@@ -39,7 +39,7 @@ class PropertyNode(models.Model):
 class Term(models.Model):
     name = models.CharField(db_column='Name', max_length=50)
     language = models.ForeignKey(LanguageNode, models.DO_NOTHING, db_column='Language')
-    info = models.TextField(db_column='Info', blank=True, null=True)
+    info = models.TextField(db_column='Info', blank=True)
     slug = models.SlugField(db_column='Slug')
 
     class Meta:
