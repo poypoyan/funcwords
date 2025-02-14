@@ -9,8 +9,6 @@ class ForeignKeyDropDownDisp(ModelChoiceField):
 class TermForeignKeyDropDownDisp(ModelChoiceField):
     def label_from_instance(self, obj):
         return f'{obj.name}, {obj.language.name}'
-    
-# TODO: Vary required fields
 
 # Register your models here.
 @admin.register(LanguageNode)
@@ -28,6 +26,11 @@ class LanguageNodeAdmin(admin.ModelAdmin):
                 return ForeignKeyDropDownDisp(queryset=LanguageNode.objects)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields['parentnode'].required = False
+        return form
+
 @admin.register(PropertyNode)
 class PropertyNodeAdmin(admin.ModelAdmin):
     list_display = ('name', 'parentnode__name')
@@ -42,6 +45,11 @@ class PropertyNodeAdmin(admin.ModelAdmin):
             else:
                 return ForeignKeyDropDownDisp(queryset=PropertyNode.objects)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields['parentnode'].required = False
+        return form
 
 @admin.register(Term)
 class TermAdmin(admin.ModelAdmin):

@@ -18,9 +18,15 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+with open(BASE_DIR / 'other/sec/admin_url.txt') as f:
+    ADMIN_URL = f.read().strip()
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path(f'{ADMIN_URL}/', admin.site.urls),
     path('', include('fwapp.urls_app'))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
