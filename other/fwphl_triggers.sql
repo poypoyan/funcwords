@@ -1,6 +1,6 @@
 -- Function Words in Philippine Languages
 -- Triggers
-use Function_Words;
+use function_words;
 delimiter //
 
 create trigger populate_lang_disps_bi before insert on Language_Node
