@@ -21,7 +21,7 @@ class LanguageNode(models.Model):
     slug = models.SlugField(db_column='Slug')
 
     class Meta:
-        db_table = 'language_node'
+        db_table = 'Language_Node'
 
 
 class PropertyNode(models.Model):
@@ -33,7 +33,7 @@ class PropertyNode(models.Model):
     slug = models.SlugField(db_column='Slug')
 
     class Meta:
-        db_table = 'property_node'
+        db_table = 'Property_Node'
 
 
 class Term(models.Model):
@@ -43,7 +43,7 @@ class Term(models.Model):
     slug = models.SlugField(db_column='Slug')
 
     class Meta:
-        db_table = 'term'
+        db_table = 'Term'
 
 
 class TermProperty(models.Model):
@@ -52,7 +52,7 @@ class TermProperty(models.Model):
     dispindex = models.IntegerField(db_column='DispIndex')
 
     class Meta:
-        db_table = 'term_property'
+        db_table = 'Term_Property'
         db_table_comment = "Associates a Property to a Term."
         unique_together = (('term', 'prop'),)
         verbose_name_plural = "Term properties"
@@ -63,7 +63,7 @@ class Reference(models.Model):
     info = models.TextField(db_column='Info')
 
     class Meta:
-        db_table = 'reference'
+        db_table = 'Reference'
 
 
 class LanguageReference(models.Model):
@@ -72,7 +72,7 @@ class LanguageReference(models.Model):
     dispindex = models.IntegerField(db_column='DispIndex')
 
     class Meta:
-        db_table = 'language_reference'
+        db_table = 'Language_Reference'
         db_table_comment = "Associates a Reference to a Language."
         unique_together = (('lang', 'ref'),)
 
@@ -83,7 +83,7 @@ class PropertyReference(models.Model):
     dispindex = models.IntegerField(db_column='DispIndex')
 
     class Meta:
-        db_table = 'property_reference'
+        db_table = 'Property_Reference'
         db_table_comment = "Associates a Reference to a Property."
         unique_together = (('prop', 'ref'),)
 
@@ -94,6 +94,6 @@ class TermReference(models.Model):
     dispindex = models.IntegerField(db_column='DispIndex')
 
     class Meta:
-        db_table = 'term_reference'
+        db_table = 'Term_Reference'
         db_table_comment = "Associates a Reference to a Term."
         unique_together = (('term', 'ref'),)

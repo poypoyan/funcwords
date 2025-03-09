@@ -34,7 +34,6 @@ migrate: ## Apply database migrations
 
 makemigrations: ## Create new database migrations
 	docker compose exec web python manage.py makemigrations
-	docker compose exec web python manage.py makemigrations fwapp
 
 static: ## Collect static files
 	docker compose exec web python manage.py collectstatic --noinput

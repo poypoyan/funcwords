@@ -1,4 +1,5 @@
 -- Insert some Tagalog personal pronouns ("Direct"/"ang" case only) for testing.
+use Function_Words;
 
 insert into Language_Node (Name, NodeType)
 values ('Greater Central Philippine', 2);
