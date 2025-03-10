@@ -1,4 +1,5 @@
 __pycache__/
 fwapp/migrations/
 fwvenv/
-other/sec/
+
+node_modules/

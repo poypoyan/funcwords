@@ -58,6 +58,8 @@ def cat_detail(request, cat):
 
 def random_term(_):
     terms_all = models.Term.objects.values_list('id', flat=True)
+    if not terms_all:
+        return redirect('/languages')
     rnd_id = random.choice(terms_all)
     term_query = models.Term.objects.values('slug', 'language').get(id=rnd_id)
     lang_query = models.LanguageNode.objects.values('slug').get(id=term_query['language'])

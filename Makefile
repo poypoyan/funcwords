@@ -35,6 +35,9 @@ migrate: ## Apply database migrations
 makemigrations: ## Create new database migrations
 	docker compose exec web python manage.py makemigrations
 
+makemigrations-fwapp: ## Create new database migrations for fwapp
+	docker compose exec web python manage.py makemigrations fwapp
+
 static: ## Collect static files
 	docker compose exec web python manage.py collectstatic --noinput
 
@@ -48,4 +51,4 @@ help: ## Display this help message
 	@echo "Usage: make [target]"
 	@echo ""
 	@echo "Targets:"
-	@awk -F ':|##' '/^[^\t].+?:.*?##/ { printf "  %-20s %s\n", $$1, $$NF }' $(MAKEFILE_LIST) 
+	@awk -F ':|##' '/^[^\t].+?:.*?##/ { printf "  %-20s %s\n", $$1, $$NF }' $(MAKEFILE_LIST)

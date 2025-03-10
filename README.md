@@ -1,28 +1,48 @@
 # funcwords
 Source code of *Function Words in Philippine Languages* (FWPHL) future website. Stack: Django, MySQL.
 
-## Development and testing with `venv`
-Windows
-```console
-git clone https://codeberg.org/poypoyan/funcwords.git
-cd funcwords
-python -m venv fwvenv
-fwvenv\Scripts\activate
-pip install --upgrade -r requirements.txt
-```
-Type `python` to run Python CLI, and type `deactivate` to exit the environment.
+## Docker Setup
+1. Make sure you have Docker and Make installed.
+2. Run the following commands:
+```bash
+# Build and start the application
+make build
+make up
 
-Linux
-```console
-git clone https://codeberg.org/poypoyan/funcwords.git
-cd funcwords
-python3 -m venv fwvenv
-source fwvenv/bin/activate
-pip install --upgrade -r requirements.txt
+# Or start in detached mode
+make up-d
 ```
-Type `python3` to run Python CLI, and type `deactivate` to exit the environment.
+Wait a few seconds until the "web-1" container outputs text in terminal. The website will be available at `http://localhost:8000`.
 
-Then read the "Init Steps" [here](<other/django cheatsheet.txt>) to initialize the MySQL server with tables and stuff.
+3. Have another terminal tab/window, then run the following commands:
+```bash
+make makemigrations-fwapp   # run once only. if /fwapp/migrations exists already, makemigrations is now enough.
+make makemigrations
+make migrate
+source .env_mysql
+docker exec -i funcwords-db-1 mysql -u root -p"$MYSQL_ROOT_PASSWORD" < ./other/fwphl_triggers.sql
+```
+
+Then to insert sample data:
+```bash
+docker exec -i funcwords-db-1 mysql --default-character-set=utf8 -u root -p"$MYSQL_ROOT_PASSWORD" < ./other/tagalog_personal_pronouns_insert.sql
+```
+
+After these, the website should now be populated with data.
+
+## Extra Stuff
+* We provide a Makefile for common commands for development.
+* Docker Shell:
+```bash
+make shell
+```
+
+* MySQL Command Line (requires typing root password):
+```bash
+docker exec -it funcwords-db-1 mysql -u root -p
+```
+
+* Lastly, you may take a look at my [Django cheatcheet](<other/django cheatsheet.txt>).
 
 ## License
 Distributed under the MIT software license. See the accompanying
