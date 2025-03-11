@@ -1,7 +1,12 @@
-node_modules
-.git
+.git/
 .gitignore
 .env
+.env_django
 .env_mysql
 
+**/__pycache__/
+**/*.py[cod]
+fwvenv/
 other
+
+node_modules/
