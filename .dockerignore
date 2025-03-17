@@ -1,8 +1,8 @@
 .git/
 .gitignore
+.dockerignore
 .env
 .env_django
-.env_mysql
 
 **/__pycache__/
 **/*.py[cod]

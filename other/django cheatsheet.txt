@@ -21,14 +21,13 @@ Testing:
 python manage.py test
 
 Init steps:
-1) In MySQL server, run fwphl_init.sql
-2) In Django, migrate models
-3) In MySQL server, run fwphl_triggers.sql
-4) In Django, create superuser
-5) (Optional) Run tagalog_personal_pronouns_insert.sql for initial data
+1) In Django, migrate models
+2) In database server, run fwphl_triggers.sql
+3) In Django, create superuser
+4) (Optional) Run tagalog_personal_pronouns_insert.sql for initial data
 
 Re-init steps before doing init steps above:
-1) In MySQL server, drop database.
+1) In database server, drop database.
 2) In Django, delete all .py files under fwApp/migrations except __init__.py.
 
 To view HTTP error response pages (do this locally only!):

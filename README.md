@@ -19,13 +19,12 @@ Wait a few seconds until the "web-1" container outputs text in terminal. The web
 make makemigrations-fwapp   # run once only. if /fwapp/migrations exists already, makemigrations is now enough.
 make makemigrations
 make migrate
-source .env_mysql
-docker exec -i funcwords-db-1 mysql -u root -p"$MYSQL_ROOT_PASSWORD" < ./other/fwphl_triggers.sql
+docker exec -i funcwords-db-1 psql -U user0 -d Function_Words < ./other/fwphl_triggers.sql
 ```
 
 Then to insert sample data:
 ```bash
-docker exec -i funcwords-db-1 mysql --default-character-set=utf8 -u root -p"$MYSQL_ROOT_PASSWORD" < ./other/tagalog_personal_pronouns_insert.sql
+docker exec -i funcwords-db-1 psql --default-character-set=utf8 -U user0 -d Function_Words < ./other/tagalog_personal_pronouns_insert.sql
 ```
 
 After these, the website should now be populated with data.
