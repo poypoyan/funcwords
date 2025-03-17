@@ -17,7 +17,7 @@ insert into Language_Node (Name, NodeType, ParentNode)
 select 'Batangas', 1, Id from Language_Node where Name = 'Tagalog';
 
 -- Sample Reference
-insert into Reference(Name, Info)
+insert into Reference (Name, Info)
 values ('blust-gcp', 'Blust, R. (1991). The Greater Central Philippines Hypothesis. <i>Oceanic Linguistics</i>, 30(2), 73–129. https://doi.org/10.2307/3623084.');
 
 insert into Language_Reference (Lang, Ref)
