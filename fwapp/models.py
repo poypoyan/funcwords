@@ -6,13 +6,14 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
+from django.db.models import Q
 
 class LanguageNode(models.Model):
     # If node is dialect, please set a language as parent.
     # If node is language, please set a group as parent.
     name = models.CharField(max_length=50, help_text='If this is a dialect, don\'t include the language name anymore.')
-    nodetype = models.SmallIntegerField(help_text='0 = language, 1 = dialect, 2 = group.<br/>For dialect, parent node <b>shouldn\'t be null!</b> Else, server error occurs.')
-    parentnode = models.ForeignKey('self', models.DO_NOTHING, blank=True, null=True)
+    nodetype = models.SmallIntegerField(help_text='0 = language, 1 = dialect, 2 = group.')
+    parentnode = models.ForeignKey('self', models.DO_NOTHING, db_column='parentnode', blank=True, null=True)
     info = models.TextField(blank=True)
     displayname = models.CharField(max_length=50)
     displaylinks = models.JSONField()
@@ -20,11 +21,17 @@ class LanguageNode(models.Model):
 
     class Meta:
         db_table = 'language_node'
+        constraints = [
+            models.CheckConstraint(
+                check=~(Q(nodetype=1) & Q(parentnode=None)),
+                name='dialects should have parentnode'
+            ),
+        ]
 
 
 class PropertyNode(models.Model):
     name = models.CharField(max_length=50)
-    parentnode = models.ForeignKey('self', models.DO_NOTHING, blank=True, null=True)
+    parentnode = models.ForeignKey('self', models.DO_NOTHING, db_column='parentnode', blank=True, null=True)
     info = models.TextField(blank=True)
     displayname = models.CharField(max_length=50)
     displaylinks = models.JSONField()
@@ -36,7 +43,7 @@ class PropertyNode(models.Model):
 
 class Term(models.Model):
     name = models.CharField(max_length=50)
-    language = models.ForeignKey(LanguageNode, models.DO_NOTHING)
+    language = models.ForeignKey(LanguageNode, models.DO_NOTHING, db_column='language')
     info = models.TextField(blank=True)
     slug = models.SlugField()
 
@@ -45,8 +52,8 @@ class Term(models.Model):
 
 
 class TermProperty(models.Model):
-    term = models.ForeignKey(Term, models.CASCADE)
-    prop = models.ForeignKey(PropertyNode, models.CASCADE)
+    term = models.ForeignKey(Term, models.CASCADE, db_column='term')
+    prop = models.ForeignKey(PropertyNode, models.CASCADE, db_column='prop')
     dispindex = models.IntegerField()
 
     class Meta:
@@ -65,8 +72,8 @@ class Reference(models.Model):
 
 
 class LanguageReference(models.Model):
-    lang = models.ForeignKey(LanguageNode, models.CASCADE)
-    ref = models.ForeignKey(Reference, models.CASCADE,)
+    lang = models.ForeignKey(LanguageNode, models.CASCADE, db_column='lang')
+    ref = models.ForeignKey(Reference, models.CASCADE, db_column='ref')
     dispindex = models.IntegerField()
 
     class Meta:
@@ -76,8 +83,8 @@ class LanguageReference(models.Model):
 
 
 class PropertyReference(models.Model):
-    prop = models.ForeignKey(PropertyNode, models.CASCADE)
-    ref = models.ForeignKey(Reference, models.CASCADE)
+    prop = models.ForeignKey(PropertyNode, models.CASCADE, db_column='prop')
+    ref = models.ForeignKey(Reference, models.CASCADE, db_column='ref')
     dispindex = models.IntegerField()
 
     class Meta:
@@ -87,8 +94,8 @@ class PropertyReference(models.Model):
 
 
 class TermReference(models.Model):
-    term = models.ForeignKey(Term, models.CASCADE)
-    ref = models.ForeignKey(Reference, models.CASCADE)
+    term = models.ForeignKey(Term, models.CASCADE, db_column='term')
+    ref = models.ForeignKey(Reference, models.CASCADE, db_column='ref')
     dispindex = models.IntegerField()
 
     class Meta:

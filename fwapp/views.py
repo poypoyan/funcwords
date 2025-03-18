@@ -63,4 +63,4 @@ def random_term(_):
     rnd_id = random.choice(terms_all)
     term_query = models.Term.objects.values('slug', 'language').get(id=rnd_id)
     lang_query = models.LanguageNode.objects.values('slug').get(id=term_query['language'])
-    return redirect(f'/{ lang_query['slug'] }/{ term_query['slug'] }')
+    return redirect(f'/{ lang_query["slug"] }/{ term_query["slug"] }')

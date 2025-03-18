@@ -1,5 +1,5 @@
 # funcwords
-Source code of *Function Words in Philippine Languages* (FWPHL) future website. Stack: Django, MySQL.
+Source code of *Function Words in Philippine Languages* (FWPHL) future website. Stack: Django, PostgreSQL.
 
 ## Docker Setup
 1. Make sure you have Docker and Make installed.
@@ -16,7 +16,7 @@ Wait a few seconds until the "web-1" container outputs text in terminal. The web
 
 3. Have another terminal tab/window, then run the following commands:
 ```bash
-make makemigrations-fwapp   # run once only. if /fwapp/migrations exists already, makemigrations is now enough.
+make makemigrations-fwapp   # run once only. if /fwapp/migrations in container exists already, makemigrations is now enough.
 make makemigrations
 make migrate
 docker exec -i funcwords-db-1 psql -U user0 -d Function_Words < ./other/fwphl_triggers.sql
@@ -24,7 +24,7 @@ docker exec -i funcwords-db-1 psql -U user0 -d Function_Words < ./other/fwphl_tr
 
 Then to insert sample data:
 ```bash
-docker exec -i funcwords-db-1 psql --default-character-set=utf8 -U user0 -d Function_Words < ./other/tagalog_personal_pronouns_insert.sql
+docker exec -i funcwords-db-1 psql -U user0 -d Function_Words < ./other/tagalog_personal_pronouns_insert.sql
 ```
 
 After these, the website should now be populated with data.
@@ -36,12 +36,12 @@ After these, the website should now be populated with data.
 make shell
 ```
 
-* MySQL Command Line (requires typing root password):
+* PostgreSQL Command Line:
 ```bash
-docker exec -it funcwords-db-1 mysql -u root -p
+docker exec -it funcwords-db-1 psql -d Function_Words -U user0
 ```
 
-* Lastly, you may take a look at my [Django cheatcheet](<other/django cheatsheet.txt>).
+* Lastly, you may take a look at my [Django cheatsheet](<other/django cheatsheet.txt>).
 
 ## License
 Distributed under the MIT software license. See the accompanying
