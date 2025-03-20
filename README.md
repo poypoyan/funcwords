@@ -1,5 +1,5 @@
 # funcwords
-Source code of *Function Words in Philippine Languages* (FWPHL) future website. Stack: Django, PostgreSQL.
+Function Words in Philippine Languages (FWPHL). Stack: Django, PostgreSQL.
 
 ## Docker Setup
 1. Make sure you have Docker and Make installed.
@@ -12,7 +12,7 @@ make up
 # Or start in detached mode
 make up-d
 ```
-Wait a few seconds until the "web-1" container outputs text in terminal. The website will be available at `http://localhost:8000`.
+Then `http://localhost:8000` should now work.
 
 3. Have another terminal tab/window, then run the following commands:
 ```bash
@@ -22,12 +22,11 @@ make migrate
 docker exec -i funcwords-db-1 psql -U user0 -d Function_Words < ./other/fwphl_triggers.sql
 ```
 
-Then to insert sample data:
+4. (Optional but recommended) To insert sample data:
 ```bash
 docker exec -i funcwords-db-1 psql -U user0 -d Function_Words < ./other/tagalog_personal_pronouns_insert.sql
 ```
-
-After these, the website should now be populated with data.
+Then it is now populated with data.
 
 ## Extra Stuff
 * We provide a Makefile for common commands for development.
