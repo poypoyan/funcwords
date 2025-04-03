@@ -2,7 +2,10 @@
 .gitignore
 .dockerignore
 .env
-.env_django
+Dockerfile
+Makefile
+README.md
+docker-compose.yml
 
 **/__pycache__/
 **/*.py[cod]
