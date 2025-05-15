@@ -22,7 +22,7 @@ import os
 
 
 urlpatterns = [
-    path(os.getenv('DJANGO_ADMIN_LOGIN'), admin.site.urls),
+    path(os.getenv('DJANGO_ADMIN_LOGIN') + '/', admin.site.urls),
     path('', include('fwapp.urls_app'))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

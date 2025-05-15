@@ -15,7 +15,7 @@ class LanguageNode(models.Model):
     nodetype = models.SmallIntegerField(help_text='0 = language, 1 = dialect, 2 = group.')
     parentnode = models.ForeignKey('self', models.DO_NOTHING, db_column='parentnode', blank=True, null=True)
     info = models.TextField(blank=True)
-    displayname = models.CharField(max_length=50)
+    displayname = models.CharField(max_length=50, unique=True)
     displaylinks = models.JSONField()
     slug = models.SlugField()
 
@@ -33,7 +33,7 @@ class PropertyNode(models.Model):
     name = models.CharField(max_length=50)
     parentnode = models.ForeignKey('self', models.DO_NOTHING, db_column='parentnode', blank=True, null=True)
     info = models.TextField(blank=True)
-    displayname = models.CharField(max_length=50)
+    displayname = models.CharField(max_length=50, unique=True)
     displaylinks = models.JSONField()
     slug = models.SlugField()
 
@@ -45,7 +45,7 @@ class Term(models.Model):
     name = models.CharField(max_length=50)
     language = models.ForeignKey(LanguageNode, models.DO_NOTHING, db_column='language')
     info = models.TextField(blank=True)
-    slug = models.SlugField()
+    slug = models.SlugField(blank=True, help_text='Modify this only if the above name is a duplicate (i.e., the term has many different meanings).')
 
     class Meta:
         db_table = 'term'
