@@ -56,6 +56,7 @@ class TermAdmin(admin.ModelAdmin):
     list_display = ('name', 'language__name')
     search_fields = ('name',)
     list_filter = ('name', 'language__name')
+    exclude = ('slug',)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'language':

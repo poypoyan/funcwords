@@ -64,3 +64,6 @@ def random_term(_):
     term_query = models.Term.objects.values('slug', 'language').get(id=rnd_id)
     lang_query = models.LanguageNode.objects.values('slug').get(id=term_query['language'])
     return redirect(f'/{ lang_query["slug"] }/{ term_query["slug"] }')
+
+def search(request):
+    return render(request, 'search.html')

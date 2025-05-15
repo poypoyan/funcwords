@@ -115,13 +115,21 @@ $$ language plpgsql;
 
 create or replace function populate_term_slug_bi() returns trigger as $$
 begin
-    new.Slug = lower(replace(new.Name, ' ', '-'));
+    new.Slug = lower(replace(translate(new.Name, '()', ''), ' ', '-'));
 
     if new.Info is null then
         new.Info = '';
     end if;
 
     return new;
+end;
+$$ language plpgsql;
+
+create or replace function populate_term_slug_bu() returns trigger as $$
+begin
+    if new.Name is distinct from old.Name then
+        new.Slug = lower(replace(translate(new.Name, '()', ''), ' ', '-'));
+    end if;
 end;
 $$ language plpgsql;
 
@@ -191,6 +199,9 @@ for each row execute function populate_prop_disps_bu();
 
 create or replace trigger term_slug_bi before insert on Term
 for each row execute function populate_term_slug_bi();
+
+create or replace trigger term_slug_bu before update on Term
+for each row execute function populate_term_slug_bu();
 
 create or replace trigger tp_disp_index before insert on Term_Property
 for each row execute function populate_tp_disp_index();

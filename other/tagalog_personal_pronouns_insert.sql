@@ -1,4 +1,4 @@
--- Insert almost all Tagalog personal pronouns for sample data.
+-- Insert all Tagalog personal pronouns for sample data.
 
 insert into Language_Node (Name, NodeType)
 values ('Greater Central Philippine', 2);
@@ -25,7 +25,7 @@ inner join Reference on Language_Node.Name = 'Greater Central Philippine' and Re
 
 -- Personal Pronoun properties
 insert into Property_Node (Name)
-values ('Pronoun'), ('Singular'), ('Plural'), ('Case');
+values ('Pronoun'), ('Singular'), ('Dual'), ('Plural'), ('Case'), ('Archaic');
 
 insert into Property_Node (Name, ParentNode)
 select 'Nominative', Id from Property_Node where Name = 'Case';
@@ -47,6 +47,9 @@ select '2nd Person', Id from Property_Node where Name = 'Personal';
 
 insert into Property_Node (Name, ParentNode)
 select '3rd Person', Id from Property_Node where Name = 'Personal';
+
+insert into Property_Node (Name, ParentNode)
+select '2nd Person with 1st Person', Id from Property_Node where Name = 'Personal';
 
 insert into Property_Node (Name, ParentNode)
 select 'Inclusive', Id from Property_Node where Name = 'Plural';
@@ -118,6 +121,62 @@ inner join Property_Node on Term.Name = 'Siya' and Property_Node.Name = 'Singula
 insert into Term_Property (Term, Prop)
 select Term.Id, Property_Node.Id from Term
 inner join Property_Node on Term.Name = 'Siya' and Property_Node.Name = 'Nominative';
+
+-- Tagalog 'Kita' ("I to you"). Nominative only
+insert into Term (Name, Language)
+select 'Kita', Id from Language_Node where Name = 'Tagalog';
+
+insert into Term_Property (Term, Prop)
+select Term.Id, Property_Node.Id from Term
+inner join Property_Node on Term.Name = 'Kita' and Property_Node.Name = '2nd Person with 1st Person';
+
+insert into Term_Property (Term, Prop)
+select Term.Id, Property_Node.Id from Term
+inner join Property_Node on Term.Name = 'Kita' and Property_Node.Name = 'Singular';
+
+insert into Term_Property (Term, Prop)
+select Term.Id, Property_Node.Id from Term
+inner join Property_Node on Term.Name = 'Kita' and Property_Node.Name = 'Nominative';
+
+-- Tagalog 'Kita' (Dual)
+insert into Term (Name, Language)
+select 'Kita (2)', Id from Language_Node where Name = 'Tagalog';
+
+insert into Term_Property (Term, Prop)
+select Term.Id, Property_Node.Id from Term
+inner join Property_Node on Term.Name = 'Kita (2)' and Property_Node.Name = '1st Person';
+
+insert into Term_Property (Term, Prop)
+select Term.Id, Property_Node.Id from Term
+inner join Property_Node on Term.Name = 'Kita (2)' and Property_Node.Name = 'Dual';
+
+insert into Term_Property (Term, Prop)
+select Term.Id, Property_Node.Id from Term
+inner join Property_Node on Term.Name = 'Kita (2)' and Property_Node.Name = 'Nominative';
+
+insert into Term_Property (Term, Prop)
+select Term.Id, Property_Node.Id from Term
+inner join Property_Node on Term.Name = 'Kita (2)' and Property_Node.Name = 'Archaic';
+
+-- Tagalog 'Kata' (Dual).
+insert into Term (Name, Language)
+select 'Kata', Id from Language_Node where Name = 'Tagalog';
+
+insert into Term_Property (Term, Prop)
+select Term.Id, Property_Node.Id from Term
+inner join Property_Node on Term.Name = 'Kata' and Property_Node.Name = '1st Person';
+
+insert into Term_Property (Term, Prop)
+select Term.Id, Property_Node.Id from Term
+inner join Property_Node on Term.Name = 'Kata' and Property_Node.Name = 'Dual';
+
+insert into Term_Property (Term, Prop)
+select Term.Id, Property_Node.Id from Term
+inner join Property_Node on Term.Name = 'Kata' and Property_Node.Name = 'Nominative';
+
+insert into Term_Property (Term, Prop)
+select Term.Id, Property_Node.Id from Term
+inner join Property_Node on Term.Name = 'Kata' and Property_Node.Name = 'Archaic';
 
 -- Tagalog 'Tayo'
 insert into Term (Name, Language)
@@ -231,6 +290,26 @@ inner join Property_Node on Term.Name = 'Niya' and Property_Node.Name = 'Singula
 insert into Term_Property (Term, Prop)
 select Term.Id, Property_Node.Id from Term
 inner join Property_Node on Term.Name = 'Niya' and Property_Node.Name = 'Genitive';
+
+-- Tagalog 'Nita'
+insert into Term (Name, Language)
+select 'Nita', Id from Language_Node where Name = 'Tagalog';
+
+insert into Term_Property (Term, Prop)
+select Term.Id, Property_Node.Id from Term
+inner join Property_Node on Term.Name = 'Nita' and Property_Node.Name = '1st Person';
+
+insert into Term_Property (Term, Prop)
+select Term.Id, Property_Node.Id from Term
+inner join Property_Node on Term.Name = 'Nita' and Property_Node.Name = 'Dual';
+
+insert into Term_Property (Term, Prop)
+select Term.Id, Property_Node.Id from Term
+inner join Property_Node on Term.Name = 'Nita' and Property_Node.Name = 'Genitive';
+
+insert into Term_Property (Term, Prop)
+select Term.Id, Property_Node.Id from Term
+inner join Property_Node on Term.Name = 'Nita' and Property_Node.Name = 'Archaic';
 
 -- Tagalog 'Natin'
 insert into Term (Name, Language)
@@ -360,6 +439,26 @@ inner join Property_Node on Term.Name = 'Kaniya' and Property_Node.Name = 'Singu
 insert into Term_Property (Term, Prop)
 select Term.Id, Property_Node.Id from Term
 inner join Property_Node on Term.Name = 'Kaniya' and Property_Node.Name = 'Oblique';
+
+-- Tagalog 'Kanita'
+insert into Term (Name, Language)
+select 'Kanita', Id from Language_Node where Name = 'Tagalog';
+
+insert into Term_Property (Term, Prop)
+select Term.Id, Property_Node.Id from Term
+inner join Property_Node on Term.Name = 'Kanita' and Property_Node.Name = '1st Person';
+
+insert into Term_Property (Term, Prop)
+select Term.Id, Property_Node.Id from Term
+inner join Property_Node on Term.Name = 'Kanita' and Property_Node.Name = 'Dual';
+
+insert into Term_Property (Term, Prop)
+select Term.Id, Property_Node.Id from Term
+inner join Property_Node on Term.Name = 'Kanita' and Property_Node.Name = 'Oblique';
+
+insert into Term_Property (Term, Prop)
+select Term.Id, Property_Node.Id from Term
+inner join Property_Node on Term.Name = 'Kanita' and Property_Node.Name = 'Archaic';
 
 -- Tagalog 'Atin'
 insert into Term (Name, Language)

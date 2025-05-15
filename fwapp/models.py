@@ -11,11 +11,11 @@ from django.db.models import Q
 class LanguageNode(models.Model):
     # If node is dialect, please set a language as parent.
     # If node is language, please set a group as parent.
-    name = models.CharField(max_length=50, help_text='If this is a dialect, don\'t include the language name anymore.')
+    name = models.CharField(max_length=50, unique=True, help_text='If this is a dialect, don\'t include the language name anymore.')
     nodetype = models.SmallIntegerField(help_text='0 = language, 1 = dialect, 2 = group.')
     parentnode = models.ForeignKey('self', models.DO_NOTHING, db_column='parentnode', blank=True, null=True)
     info = models.TextField(blank=True)
-    displayname = models.CharField(max_length=50, unique=True)
+    displayname = models.CharField(max_length=50)
     displaylinks = models.JSONField()
     slug = models.SlugField()
 
@@ -30,10 +30,10 @@ class LanguageNode(models.Model):
 
 
 class PropertyNode(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
     parentnode = models.ForeignKey('self', models.DO_NOTHING, db_column='parentnode', blank=True, null=True)
     info = models.TextField(blank=True)
-    displayname = models.CharField(max_length=50, unique=True)
+    displayname = models.CharField(max_length=50)
     displaylinks = models.JSONField()
     slug = models.SlugField()
 
@@ -42,13 +42,14 @@ class PropertyNode(models.Model):
 
 
 class Term(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, help_text='Please capitalize. For new definition of duplicate term, add a number like "Kita (2)".')
     language = models.ForeignKey(LanguageNode, models.DO_NOTHING, db_column='language')
     info = models.TextField(blank=True)
-    slug = models.SlugField(blank=True, help_text='Modify this only if the above name is a duplicate (i.e., the term has many different meanings).')
+    slug = models.SlugField()
 
     class Meta:
         db_table = 'term'
+        unique_together = (('name', 'language'),)
 
 
 class TermProperty(models.Model):

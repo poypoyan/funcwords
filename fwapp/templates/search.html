@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<form action="/search">
+  <input type="text" name="search" id="search"/>
+  <select name="type" id="type">
+    <option value="term">Term</option>
+    <option value="language">Language</option>
+    <option value="category">Category</option>
+  </select>
+  <input type="submit" value="Search"/>
+</form>
+{% endblock %}
