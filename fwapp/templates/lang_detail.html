@@ -38,7 +38,7 @@
 
 {% if lang_children %}
   <br/>
-  <b>{% if lang.nodetype == 0 %}Dialects:{% else %}Members:{% endif %}</b>
+  <b>{% if lang.nodetype == 0 %}Dialects{% else %}Members{% endif %} ({{ langs_ct }}):</b>
   <br/><br/>
   <ul>
     {% for lang_ch in lang_children %}
@@ -51,8 +51,10 @@
 
 {% if terms %}{% if lang.nodetype == 0 or lang.nodetype == 1 %}
   <br/>
-  <b>Term Entries:</b>
-  <br/><br/>
+  <b>Term Entries ({{ terms_ct }}):</b>
+  {% with page_obj=terms %}
+    {% include 'pagination.html' %}
+  {% endwith %}
   <ul>
     {% for term in terms %}
       <li>

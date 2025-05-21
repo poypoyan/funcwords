@@ -13,8 +13,10 @@
 <br/>
 {% if type_select %}
   {% if results %}
-    <b>Search Results:</b>
-    <br/><br/>
+    <b>Search Results ({{ results_ct }}):</b>
+    {% with page_obj=results %}
+      {% include 'pagination.html' %}
+    {% endwith %}
     <ul>
       {% for res in results %}
       <li>

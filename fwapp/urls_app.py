@@ -2,6 +2,7 @@ from django.urls import path
 from django.http import HttpResponsePermanentRedirect
 from . import views
 
+
 urlpatterns = [
     path('', views.home),
     path('languages/', views.langs),

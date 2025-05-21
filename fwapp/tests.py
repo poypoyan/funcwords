@@ -1,7 +1,6 @@
 from django.test import SimpleTestCase
 from django.template import Context, Template
 
-# Create your tests here.
 
 class AutoLinkTest(SimpleTestCase):
     def test_autolink(self):

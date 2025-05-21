@@ -7,6 +7,10 @@
 {% block content %}
 <h1>Categories</h1>
 <br/>
+<b>Entries ({{ cats_ct }}):</b>
+{% with page_obj=cats %}
+  {% include 'pagination.html' %}
+{% endwith %}
 <ul>
   {% for cat in cats %}
     <li>

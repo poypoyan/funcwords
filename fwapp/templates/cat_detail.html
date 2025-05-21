@@ -38,7 +38,7 @@
 
 {% if cat_children %}
   <br/>
-  <b>Members:</b>
+  <b>Members ({{ cats_ct }}):</b>
   <br/><br/>
   <ul>
     {% for cat_ch in cat_children %}
@@ -51,8 +51,10 @@
 
 {% if terms %}
   <br/>
-  <b>Term Entries:</b>
-  <br/><br/>
+  <b>Term Entries ({{ terms_ct }}):</b>
+  {% with page_obj=terms %}
+    {% include 'pagination.html' %}
+  {% endwith %}
   <ul>
     {% for term in terms %}
       <li>

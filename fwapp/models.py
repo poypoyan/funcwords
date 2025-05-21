@@ -8,6 +8,7 @@
 from django.db import models
 from django.db.models import Q
 
+
 class LanguageNode(models.Model):
     # If node is dialect, please set a language as parent.
     # If node is language, please set a group as parent.

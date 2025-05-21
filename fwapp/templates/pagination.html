@@ -1,0 +1,15 @@
+<br/><br/>
+{% if page_obj.has_previous %}
+  <a href="?{{ bef_get_params }}page=1" rel="nofollow">&lt;&lt; First</a>&nbsp;
+  <a href="?{{ bef_get_params }}page={{ page_obj.previous_page_number }}" rel="nofollow">Previous</a>
+  &nbsp;&nbsp;&nbsp;
+{% endif %}
+
+Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+
+{% if page_obj.has_next %}
+  &nbsp;&nbsp;&nbsp;
+  <a href="?{{ bef_get_params }}page={{ page_obj.next_page_number }}" rel="nofollow">Next</a>&nbsp;
+  <a href="?{{ bef_get_params }}page={{ page_obj.paginator.num_pages }}" rel="nofollow">Last &gt;&gt;</a>
+{% endif %}
+<br/>(Up to {{ per_page }} items per page.)<br/><br/>
