@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %} - Search{% endblock %}
+{% block title %}{% block og_title %}Search - {% endblock %}{% endblock %}
 {% block specific_head %}
 <link rel="stylesheet" type="text/css" href="{% static 'style_search.css' %}"/>
 <meta name="robots" content="noindex"/>

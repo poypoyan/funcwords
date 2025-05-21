@@ -1,10 +1,13 @@
 {% load static %}<!DOCTYPE html>
 <html>
   <head>
-    <title>Function Words in Philippine Languages{% block title %}{% endblock %}</title>
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+    <title>{% block title %}{% endblock %}Function Words in Philippine Languages</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="{% block og_title %}{% endblock %}Function Words in Philippine Languages"/>
+    <meta property="og:url" content="https://fwphlang.info{{ request.path }}"/>
+    <meta property="og:image" content="{% static 'rooster.png' %}"/>
     <link rel="canonical" href="https://fwphlang.info{{ request.path }}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'style_base.css' %}"/>
     <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}"/>

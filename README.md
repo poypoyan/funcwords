@@ -23,7 +23,7 @@ docker exec -i funcwords-db-1 psql -U user0 -d Function_Words < ./other/fwphl_tr
 
 4. (Optional but recommended) To insert sample data:
 ```bash
-docker exec -i funcwords-db-1 psql -U user0 -d Function_Words < ./other/tagalog_personal_pronouns_insert.sql
+docker exec -i funcwords-db-1 psql -U user0 -d Function_Words < ./other/0_tagalog_personal_pronouns.sql
 ```
 Then it is now populated with data.
 

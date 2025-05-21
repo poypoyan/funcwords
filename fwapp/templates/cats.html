@@ -1,5 +1,9 @@
 {% extends "base.html" %}
-{% block title %} - Categories{% endblock %}
+{% block title %}{% block og_title %}Categories - {% endblock %}{% endblock %}
+{% block specific_head %}
+<meta name="description" content="Current list of categories for function words."/>
+<meta property="og:description" content="Current list of categories for function words."/>
+{% endblock %}
 {% block content %}
 <h1>Categories</h1>
 <br/>
