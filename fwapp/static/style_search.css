@@ -1,0 +1,14 @@
+.search {
+  text-align: center;
+
+  input, select {
+    font-size: 1em;
+    margin-bottom: 5px;
+  }
+  select, input[type="submit"] {
+    padding-left: 10px;
+  }
+  input[type="submit"] {
+    padding-right: 10px;
+  }
+}

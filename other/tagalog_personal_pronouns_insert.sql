@@ -1,7 +1,16 @@
 -- Insert all Tagalog personal pronouns for sample data.
 
 insert into Language_Node (Name, NodeType)
-values ('Greater Central Philippine', 2);
+values ('Austronesian', 2);
+
+insert into Language_Node (Name, NodeType, ParentNode)
+select 'Malayo-Polynesian', 2, Id from Language_Node where Name = 'Austronesian';
+
+insert into Language_Node (Name, NodeType, ParentNode)
+select 'Philippine', 2, Id from Language_Node where Name = 'Austronesian';
+
+insert into Language_Node (Name, NodeType, ParentNode)
+select 'Greater Central Philippine', 2, Id from Language_Node where Name = 'Philippine';
 
 insert into Language_Node (Name, NodeType, ParentNode)
 select 'Central Philippine', 2, Id from Language_Node where Name = 'Greater Central Philippine';
@@ -11,9 +20,6 @@ select 'Tagalic', 2, Id from Language_Node where Name = 'Central Philippine';
 
 insert into Language_Node (Name, NodeType, ParentNode)
 select 'Tagalog', 0, Id from Language_Node where Name = 'Tagalic';
-
-insert into Language_Node (Name, NodeType, ParentNode)
-select 'Batangas', 1, Id from Language_Node where Name = 'Tagalog';
 
 -- Sample Reference
 insert into Reference (Name, Info)
@@ -158,7 +164,7 @@ insert into Term_Property (Term, Prop)
 select Term.Id, Property_Node.Id from Term
 inner join Property_Node on Term.Name = 'Kita (2)' and Property_Node.Name = 'Archaic';
 
--- Tagalog 'Kata' (Dual).
+-- Tagalog 'Kata'
 insert into Term (Name, Language)
 select 'Kata', Id from Language_Node where Name = 'Tagalog';
 

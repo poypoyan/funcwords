@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.http import Http404
 from . import models
+from .forms import SearchForm
 import random
 
 # Create your views here.
@@ -66,4 +67,20 @@ def random_term(_):
     return redirect(f'/{ lang_query["slug"] }/{ term_query["slug"] }')
 
 def search(request):
-    return render(request, 'search.html')
+    if len(request.GET) == 0:
+        return render(request, 'search.html', { 'form': SearchForm(), 'type_select': None, 'results': None })
+
+    form = SearchForm(request.GET)
+    if not form.is_valid():
+        return redirect('/search')   # remove GET parameters in current url
+
+    # basic search (not full text)
+    searched = form.cleaned_data['q']
+    if form.cleaned_data['t'] == 'term':
+        results = models.Term.objects.values('name', 'slug', 'language__displayname', 'language__slug').filter(Q(name__unaccent__trigram_similar=searched) | Q(name__unaccent__icontains=searched))
+    elif form.cleaned_data['t'] == 'language':
+        results = models.LanguageNode.objects.values('displayname', 'slug').filter(Q(displayname__unaccent__trigram_similar=searched) | Q(displayname__unaccent__icontains=searched))
+    elif form.cleaned_data['t'] == 'category':
+        results = models.PropertyNode.objects.values('displayname', 'slug').filter(Q(displayname__unaccent__trigram_similar=searched) | Q(displayname__unaccent__icontains=searched))
+
+    return render(request, 'search.html', { 'form': form, 'type_select': form.cleaned_data['t'], 'results': results })

@@ -1,12 +1,36 @@
 {% extends "base.html" %}
+{% load static %}
+{% block title %} - Search{% endblock %}
+{% block specific_head %}
+<link rel="stylesheet" type="text/css" href="{% static 'style_search.css' %}"/>
+<meta name="robots" content="noindex"/>
+{% endblock %}
 {% block content %}
-<form action="/search">
-  <input type="text" name="search" id="search"/>
-  <select name="type" id="type">
-    <option value="term">Term</option>
-    <option value="language">Language</option>
-    <option value="category">Category</option>
-  </select>
+<form action="/search" class="search">
+  {{ form }}
   <input type="submit" value="Search"/>
 </form>
+<br/>
+{% if type_select %}
+  {% if results %}
+    <b>Search Results:</b>
+    <br/><br/>
+    <ul>
+      {% for res in results %}
+      <li>
+        {% if type_select == 'term' %}
+          <a href="/{{ res.language__slug }}">{{ res.language__displayname }}</a>:
+          <a href="/{{ res.language__slug }}/{{ res.slug }}">{{ res.name }}</a>
+        {% elif type_select == 'language' %}
+          <a href="/category/{{ res.slug }}">{{ res.displayname }}</a>
+        {% elif type_select == 'category' %}
+          <a href="/category/{{ res.slug }}">{{ res.displayname }}</a>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <b>No Results.</b>
+  {% endif %}
+{% endif %}
 {% endblock %}

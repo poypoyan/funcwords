@@ -16,8 +16,7 @@ Then `http://localhost:8000` should now work.
 
 3. Have another terminal tab/window, then run the following commands:
 ```bash
-make makemigrations-fwapp   # run once only. if /fwapp/migrations in container exists already, makemigrations is now enough.
-make makemigrations
+make makemigrations-fwapp   # run this once only. afterwards, run 'make makemigrations' instead.
 make migrate
 docker exec -i funcwords-db-1 psql -U user0 -d Function_Words < ./other/fwphl_triggers.sql
 ```

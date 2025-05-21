@@ -1,22 +1,25 @@
 {% load static %}<!DOCTYPE html>
 <html>
   <head>
-    <title>FWPHL{% block title %}{% endblock %}</title>
+    <title>Function Words in Philippine Languages{% block title %}{% endblock %}</title>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}"/>
+    <link rel="canonical" href="https://fwphlang.info{{ request.path }}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'style_base.css' %}"/>
     <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}"/>
+    {% block specific_head %}{% endblock %}
     <script src="{% static 'functions.js' %}"></script>
   </head>
 <body>
 <header>
   <nav class="topnav" id="topnav">
-    <a class="skip-link" href="#main" onclick="toggleBurger()">Skip to content</a>
+    <a class="skip-link" href="#main" onclick="toggleBurger()" rel="nofollow">Skip to content</a>
     <a href="/">Home</a>
     <a href="/languages">Languages</a>
-    <a href="/random-term">Random Term</a>
     <a href="/categories">Categories</a>
-    <a href="/search">Search</a>
+    <a href="/random-term" rel="nofollow">Random Term</a>
+    <a href="/search" rel="nofollow">Search</a>
     <a href="javascript:void(0);" class="burger" onclick="toggleBurger(0)">&#9776;</a>
   </nav>
 </header>
