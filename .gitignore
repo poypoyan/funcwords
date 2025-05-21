@@ -1,6 +1,5 @@
 __pycache__/
 *.py[cod]
-fwapp/migrations/
 fwvenv/
 
 node_modules/
