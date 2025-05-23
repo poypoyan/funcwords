@@ -8,7 +8,7 @@ from .forms import SearchForm
 import random
 
 
-_PAGE_ENTRIES = 10
+_PAGE_ENTRIES = 30
 
 
 def error_404(request, exception):
