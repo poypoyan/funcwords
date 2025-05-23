@@ -58,7 +58,7 @@
   <ul>
     {% for term in terms %}
       <li>
-        <a href="/{{ term.language__slug }}">{{ term.language__displayname }}</a>:
+        <a href="/{{ term.language__slug }}/">{{ term.language__displayname }}</a>:
         <a href="/{{ term.language__slug }}/{{ term.slug }}">{{ term.name }}</a>
       </li>
     {% endfor %}

@@ -12,7 +12,7 @@
   <br/>
   <b>Group:</b>&nbsp;
   {% for k, v in lang.displaylinks %}
-    <a href="/{{ k }}">{{ v }}</a>
+    <a href="/{{ k }}/">{{ v }}</a>
     {% if not forloop.last %}&gt;{% endif %}
   {% endfor %}
   <br/>
@@ -43,7 +43,7 @@
   <ul>
     {% for lang_ch in lang_children %}
       <li>
-        <a href="/{{ lang_ch.slug }}">{{ lang_ch.name }}</a>
+        <a href="/{{ lang_ch.slug }}/">{{ lang_ch.name }}</a>
       </li>
     {% endfor %}
   </ul>
