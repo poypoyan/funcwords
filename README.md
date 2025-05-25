@@ -34,8 +34,9 @@ docker exec -i funcwords-db-1 psql -U user0 -d Function_Words < ./other/0_tagalo
 rsync -avz . root@<VPS IP address>:~/the-app --exclude .git/
 ```
 this assumes that the current directory of terminal is this repo.
-7. SSH to your VPS again, go to `the-app` and do the docker setup above. Website should now be up! But it's in HTTP.
-8. HTTP Secure (HTTPS) configuration in `docker-compose.yml` and `nginx.conf` are commented. Follow [this](https://certbot.eff.org/instructions?ws=nginx&os=snap) (assuming host is Ubuntu) to create SSL certificate except do
+
+6. SSH to your VPS again, go to `the-app` and do the docker setup above. Website should now be up! But it's in HTTP.
+7. HTTP Secure (HTTPS) configuration in `docker-compose.yml` and `nginx.conf` are commented. Follow [this](https://certbot.eff.org/instructions?ws=nginx&os=snap) (assuming host is Ubuntu) to create SSL certificate except do
 ```bash
 sudo certbot certonly --webroot -w /var/www/certbot/ -d example.com
 ```
