@@ -41,6 +41,9 @@ makemigrations-fwapp: ## Create new database migrations for fwapp
 static: ## Collect static files
 	docker compose exec web python manage.py collectstatic --noinput
 
+superuser: ## Create superuser
+	docker compose exec web python manage.py createsuperuser
+
 clean: ## Remove all containers, volumes, and images
 	docker compose down -v --rmi all
 

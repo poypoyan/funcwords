@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.forms import ModelChoiceField
-from .models import LanguageNode, PropertyNode, Term, TermProperty, Reference, LanguageReference, PropertyReference, TermReference
+from .models import LanguageNode, LanguageOtherName, PropertyNode, Term, TermProperty, Reference
 
 
 class ForeignKeyDropDownDisp(ModelChoiceField):
@@ -19,6 +19,7 @@ class LanguageNodeAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     list_filter = ('nodetype', 'parentnode__name')
     exclude = ('displayname', 'displaylinks', 'slug')
+    filter_horizontal = ('refs',)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'parentnode':
@@ -34,12 +35,24 @@ class LanguageNodeAdmin(admin.ModelAdmin):
         return form
 
 
+@admin.register(LanguageOtherName)
+class LanguageOtherNameAdmin(admin.ModelAdmin):
+    search_fields = ('name', 'language')
+    list_filter = ('name', 'language')
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'language':
+            return ForeignKeyDropDownDisp(queryset=LanguageNode.objects.exclude(nodetype=2))
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
 @admin.register(PropertyNode)
 class PropertyNodeAdmin(admin.ModelAdmin):
     list_display = ('name', 'parentnode__name')
     search_fields = ('name',)
     list_filter = ('name', 'parentnode__name')
     exclude = ('displayname', 'displaylinks', 'slug')
+    filter_horizontal = ('refs',)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'parentnode':
@@ -61,6 +74,7 @@ class TermAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     list_filter = ('name', 'language__name')
     exclude = ('slug',)
+    filter_horizontal = ('refs',)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'language':
@@ -89,46 +103,3 @@ class TermPropertyAdmin(admin.ModelAdmin):
 class ReferenceAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
-
-
-@admin.register(LanguageReference)
-class LanguageReferenceAdmin(admin.ModelAdmin):
-    list_display = ('lang__name', 'ref__name', 'dispindex')
-    list_filter = ('lang__name', 'ref__name')
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == 'lang':
-            return ForeignKeyDropDownDisp(queryset=LanguageNode.objects.all())
-        if db_field.name == 'ref':
-            return ForeignKeyDropDownDisp(queryset=Reference.objects.all())
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
-
-@admin.register(PropertyReference)
-class PropertyReferenceAdmin(admin.ModelAdmin):
-    list_display = ('prop__name', 'ref__name', 'dispindex')
-    list_filter = ('prop__name', 'ref__name')
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == 'prop':
-            return ForeignKeyDropDownDisp(queryset=PropertyNode.objects.all())
-        if db_field.name == 'ref':
-            return ForeignKeyDropDownDisp(queryset=Reference.objects.all())
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
-
-@admin.register(TermReference)
-class TermReferenceAdmin(admin.ModelAdmin):
-    list_display = ('term_lang', 'ref__name', 'dispindex')
-    list_filter = ('term__name', 'ref__name')
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == 'term':
-            return ForeignKeyDropDownDisp(queryset=Term.objects.all())
-        if db_field.name == 'ref':
-            return ForeignKeyDropDownDisp(queryset=Reference.objects.all())
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
-    @admin.display()
-    def term_lang(self, obj):
-        return f'{obj.term.name}, {obj.term.language.name}'

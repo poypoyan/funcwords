@@ -39,14 +39,15 @@ def lang_detail(request, lang):
         raise Http404
 
     lang_children_query = models.LanguageNode.objects.values('name', 'slug').filter(parentnode=lang_query.id).order_by('name')
+    lang_othernames_query = models.LanguageOtherName.objects.values('name').filter(language=lang_query.id).order_by('name')
     langs_ct = lang_children_query.count()
     terms_query = models.Term.objects.values('name', 'slug').filter(language=lang_query.id).order_by('name')
     terms_ct = terms_query.count()
-    refs_query = models.Reference.objects.values('info').filter(languagereference__lang=lang_query.id).order_by('languagereference__dispindex')
+    refs_query = models.Reference.objects.values('info').filter(languagenode=lang_query.id).order_by('info')
 
     paginator = Paginator(terms_query, _PAGE_ENTRIES)
     page_obj = paginator.get_page(request.GET.get("page"))
-    return render(request, 'lang_detail.html', { 'lang': lang_query, 'lang_children': lang_children_query, 'langs_ct': langs_ct, 'terms': page_obj, 'terms_ct': terms_ct, 'refs': refs_query, 'per_page': _PAGE_ENTRIES })
+    return render(request, 'lang_detail.html', { 'lang': lang_query, 'lang_children': lang_children_query, 'langs_ct': langs_ct,  'lang_on': lang_othernames_query, 'terms': page_obj, 'terms_ct': terms_ct, 'refs': refs_query, 'per_page': _PAGE_ENTRIES })
 
 
 def term_detail(request, lang, term):
@@ -57,7 +58,7 @@ def term_detail(request, lang, term):
         raise Http404
 
     props_query = models.PropertyNode.objects.values('name', 'displaylinks', 'slug').filter(termproperty__term=term_query.id).order_by('termproperty__dispindex')
-    refs_query = models.Reference.objects.values('info').filter(termreference__term=term_query.id).order_by('termreference__dispindex')
+    refs_query = models.Reference.objects.values('info').filter(term=term_query.id).order_by('info')
     return render(request, 'term_detail.html', { 'lang': lang_query, 'term': term_query, 'props': props_query, 'refs': refs_query })
 
 
@@ -80,7 +81,7 @@ def cat_detail(request, cat):
     cats_ct = cat_children_query.count()
     terms_query = models.Term.objects.values('name', 'slug', 'language__displayname', 'language__slug').filter(termproperty__prop=cat_query.id).order_by('name')
     terms_ct = terms_query.count()
-    refs_query = models.Reference.objects.values('info').filter(propertyreference__prop=cat_query.id).order_by('propertyreference__dispindex')
+    refs_query = models.Reference.objects.values('info').filter(propertynode=cat_query.id).order_by('info')
 
     paginator = Paginator(terms_query, _PAGE_ENTRIES)
     page_obj = paginator.get_page(request.GET.get("page"))
@@ -108,11 +109,16 @@ def search(request):
     # basic search (not full text)
     searched = form.cleaned_data['q']
     if form.cleaned_data['t'] == 'term':
-        results = models.Term.objects.values('name', 'slug', 'language__displayname', 'language__slug').filter(Q(name__unaccent__trigram_similar=searched) | Q(name__unaccent__icontains=searched)).order_by('name')
+        results = models.Term.objects.values('name', 'slug', 'language__displayname', 'language__slug').filter(Q(headername__unaccent__trigram_similar=searched) | Q(headername__unaccent__icontains=searched)).order_by('name')
     elif form.cleaned_data['t'] == 'language':
-        results = models.LanguageNode.objects.values('displayname', 'slug').filter(Q(displayname__unaccent__trigram_similar=searched) | Q(displayname__unaccent__icontains=searched)).order_by('displayname')
+        results0 = models.LanguageNode.objects.values('displayname', 'slug').filter(Q(displayname__unaccent__trigram_similar=searched) | Q(displayname__unaccent__icontains=searched))
+
+        results1 = models.LanguageOtherName.objects.values('language__id').filter(Q(name__unaccent__trigram_similar=searched) | Q(name__unaccent__icontains=searched))
+        results1_lang = models.LanguageNode.objects.values('displayname', 'slug').filter(id__in=results1)
+
+        results = results0.union(results1_lang).order_by('displayname')
     elif form.cleaned_data['t'] == 'category':
-        results = models.PropertyNode.objects.values('displayname', 'slug').filter(Q(displayname__unaccent__trigram_similar=searched) | Q(displayname__unaccent__icontains=searched)).order_by('displayname')
+        results = models.PropertyNode.objects.values('displayname', 'slug').filter(Q(displayname__trigram_similar=searched) | Q(displayname__icontains=searched)).order_by('displayname')
 
     results_ct = results.count()
 

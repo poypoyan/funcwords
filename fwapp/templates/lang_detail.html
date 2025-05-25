@@ -18,6 +18,16 @@
   <br/>
 {% endif %}
 
+{% if lang_on %}
+  <br/>
+  <b>Other names:</b>&nbsp;
+  {% for oname in lang_on %}
+    {{ oname.name }}
+    {% if not forloop.last %},{% endif %}
+  {% endfor %}
+  <br/>
+{% endif %}
+
 {% if lang.info %}
   <br/>
   {{ lang.info|safe }}

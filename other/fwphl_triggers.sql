@@ -130,6 +130,8 @@ begin
     if new.Name is distinct from old.Name then
         new.Slug = lower(replace(translate(new.Name, '()', ''), ' ', '-'));
     end if;
+
+    return new;
 end;
 $$ language plpgsql;
 
@@ -139,45 +141,6 @@ declare
 begin
     if new.DispIndex is null then
         select count(Id) into count from Term_Property where Term = new.Term;
-        new.DispIndex = count;
-    end if;
-
-    return new;
-end;
-$$ language plpgsql;
-
-create or replace function populate_lr_disp_index() returns trigger as $$
-declare
-    count int;
-begin
-    if new.DispIndex is null then
-        select count(Id) into count from Language_Reference where Lang = new.Lang;
-        new.DispIndex = count;
-    end if;
-
-    return new;
-end;
-$$ language plpgsql;
-
-create or replace function populate_pr_disp_index() returns trigger as $$
-declare
-    count int;
-begin
-    if new.DispIndex is null then
-        select count(Id) into count from Property_Reference where Prop = new.Prop;
-        new.DispIndex = count;
-    end if;
-
-    return new;
-end;
-$$ language plpgsql;
-
-create or replace function populate_tr_disp_index() returns trigger as $$
-declare
-    count int;
-begin
-    if new.DispIndex is null then
-        select count(Id) into count from Term_Reference where Term = new.Term;
         new.DispIndex = count;
     end if;
 
@@ -205,12 +168,3 @@ for each row execute function populate_term_slug_bu();
 
 create or replace trigger tp_disp_index before insert on Term_Property
 for each row execute function populate_tp_disp_index();
-
-create or replace trigger lr_disp_index before insert on Language_Reference
-for each row execute function populate_lr_disp_index();
-
-create or replace trigger pr_disp_index before insert on Property_Reference
-for each row execute function populate_pr_disp_index();
-
-create or replace trigger tr_disp_index before insert on Term_Reference
-for each row execute function populate_tr_disp_index();

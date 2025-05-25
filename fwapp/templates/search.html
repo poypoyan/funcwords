@@ -24,7 +24,7 @@
           <a href="/{{ res.language__slug }}/">{{ res.language__displayname }}</a>:
           <a href="/{{ res.language__slug }}/{{ res.slug }}">{{ res.name }}</a>
         {% elif type_select == 'language' %}
-          <a href="/category/{{ res.slug }}">{{ res.displayname }}</a>
+          <a href="{{ res.slug }}/">{{ res.displayname }}</a>
         {% elif type_select == 'category' %}
           <a href="/category/{{ res.slug }}">{{ res.displayname }}</a>
         {% endif %}
