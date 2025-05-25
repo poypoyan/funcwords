@@ -54,8 +54,6 @@ make shell
 docker exec -it funcwords-db-1 psql -d Function_Words -U user0
 ```
 
-* Lastly, you may take a look at my [Django cheatsheet](<other/django cheatsheet.txt>).
-
 ## License
 Distributed under the MIT software license. See the accompanying
 file LICENSE or https://opensource.org/license/mit/.
