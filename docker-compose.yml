@@ -9,11 +9,25 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
 
+  nginx:
+    build: ./nginx
+    ports:
+      - 80:80
+      # - 443:443
+    volumes:
+      - static_vol:/app/static
+      # - /etc/letsencrypt/:/etc/letsencrypt
+      # - /var/www/certbot:/var/www/certbot
+    depends_on:
+      - web
+
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
-    ports:
-      - "8000:8000"
+    command: gunicorn fwphl.wsgi:application --bind 0.0.0.0:8000
+    expose:
+      - 8000
+    volumes:
+      - static_vol:/app/static
     env_file:
       - .env
     depends_on:
@@ -21,3 +35,4 @@ services:
 
 volumes:
   postgres_data:
+  static_vol:
