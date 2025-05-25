@@ -12,11 +12,11 @@ _PAGE_ENTRIES = 30
 
 
 def error_404(request, exception):
-    return render(request, 'error_404.html', { 'is_error_page': True })
+    return render(request, 'error_404.html', { 'is_error_page': True }, status=404)
 
 
 def error_500(request):
-    return render(request, 'error_500.html', { 'is_error_page': True })
+    return render(request, 'error_500.html', { 'is_error_page': True }, status=500)
 
 
 def home(request):

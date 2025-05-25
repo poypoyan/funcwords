@@ -62,10 +62,13 @@ main a:hover {
   text-decoration: underline;
 }
 main ul {
-  list-style-position: inside;
+  margin-left: 1em;
 }
 main ol {
-  list-style-position: inside;
+  margin-left: 1em;
+}
+main .long-li li {
+  margin-bottom: 10px;
 }
 
 @media (prefers-color-scheme: dark) {

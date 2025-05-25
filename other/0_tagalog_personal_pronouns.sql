@@ -7,7 +7,7 @@ insert into Language_Node (Name, NodeType, ParentNode)
 select 'Malayo-Polynesian', 2, Id from Language_Node where Name = 'Austronesian';
 
 insert into Language_Node (Name, NodeType, ParentNode)
-select 'Philippine', 2, Id from Language_Node where Name = 'Austronesian';
+select 'Philippine', 2, Id from Language_Node where Name = 'Malayo-Polynesian';
 
 insert into Language_Node (Name, NodeType, ParentNode)
 select 'Greater Central Philippine', 2, Id from Language_Node where Name = 'Philippine';
