@@ -28,19 +28,18 @@ docker exec -i funcwords-db-1 psql -U user0 -d Function_Words < ./other/0_tagalo
 1. Grind to have some money (😫) to buy a VPS and a domain. Then follow the steps provided by the VPS provider to connect the two.
 2. Modify `.env` with secure values. Set `DEBUG` to False and `DJANGO_ALLOWED_HOSTS` to your domain with dot in the beginning, like `.example.com`. Replace every instance of `example.com` in this repo with your domain.
 3. Uncomment the `.env` in `.gitignore`. Do NOT upload prod environment variables anywhere!
-4. SSH to your VPS: `ssh root@<VPS IP address>`. After login, you're in home (~) folder. Just make a folder (mkdir) there, say `the-app`.
-5. To copy files from local to VPS, use rsync:
+4. Copy files from local to VPS using rsync:
 ```bash
 rsync -avz . root@<VPS IP address>:~/the-app --exclude .git/
 ```
-this assumes that the current directory of terminal is this repo.
+This assumes that the current directory of terminal is this repo.
 
-6. SSH to your VPS again, go to `the-app` and do the docker setup above. Website should now be up! But it's in HTTP.
-7. HTTP Secure (HTTPS) configuration in `docker-compose.yml` and `nginx.conf` are commented. Follow [this](https://certbot.eff.org/instructions?ws=nginx&os=snap) (assuming host is Ubuntu) to create SSL certificate except do
+5. SSH to your VPS: `ssh root@<VPS IP address>`. After login, you'll be in home (~) folder. Go to `the-app` directory and do the docker setup above. Website should now be up! But it's in HTTP.
+6. HTTP Secure (HTTPS) configuration in `docker-compose.yml` and `nginx.conf` are commented. Follow [this](https://certbot.eff.org/instructions?ws=nginx&os=snap) (assuming host is Ubuntu) to create SSL certificate except do
 ```bash
 sudo certbot certonly --webroot -w /var/www/certbot/ -d example.com
 ```
-for getting the certificate. Through webroot, certbot can automatically renew without stopping containers.
+for getting the certificate. Through webroot, certbot can automatically renew without needing to stop containers.
 
 ## Extra Stuff
 * We provide a Makefile for common commands for development.
