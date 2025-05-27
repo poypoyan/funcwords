@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load autolink %}
+{% load referencing %}
 {% block title %}{% block og_title %}{{ lang.displayname }} - {% endblock %}{% endblock %}
 {% block specific_head %}
 <meta name="description" content="Some information about {{ lang.displayname }} language/dialect/language group."/>
@@ -30,7 +30,8 @@
 
 {% if lang.info %}
   <br/>
-  {{ lang.info|safe }}
+  {% citelink lang.info refs as linked_info %}
+  {{ linked_info|safe }}
   <br/>
 {% endif %}
 
@@ -41,7 +42,7 @@
   <ol>
     {% for ref in refs %}
       {% autolink ref.info as linked_info %}
-      <li>{{ linked_info|safe }}</li>
+      <li id="ref-{{ forloop.counter }}">{{ linked_info|safe }}</li>
     {% endfor %}
   </ol>
 {% endif %}

@@ -20,3 +20,17 @@ def autolink(text: str) -> str:
         save_idx = i.end()
     save_str += text[save_idx: len(text)]
     return save_str
+
+
+@register.simple_tag
+def citelink(text: str, ref_query) -> str:
+    table = {}
+
+    for i, j in enumerate(ref_query, start=1):
+        table[f'[{ j['name'] }'] = f'[<a href="#ref-{ i }">{ i }</a>'
+
+    if table == {}:
+        return text
+
+    ptrn = re.compile('|'.join(map(re.escape, table)))
+    return ptrn.sub(lambda x: table[x.group(0)], text)

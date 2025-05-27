@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load autolink %}
+{% load referencing %}
 {% block title %}{% block og_title %}{{ cat.displayname }} - {% endblock %}{% endblock %}
 {% block specific_head %}
 <meta name="description" content="Some information about {{ cat.displayname }}."/>
@@ -20,7 +20,8 @@
 
 {% if cat.info %}
   <br/>
-  {{ cat.info|safe }}
+  {% citelink cat.info refs as linked_info %}
+  {{ linked_info|safe }}
   <br/>
 {% endif %}
 
@@ -31,7 +32,7 @@
   <ol>
     {% for ref in refs %}
       {% autolink ref.info as linked_info %}
-      <li>{{ linked_info|safe }}</li>
+      <li id="ref-{{ forloop.counter }}">{{ linked_info|safe }}</li>
     {% endfor %}
   </ol>
 {% endif %}

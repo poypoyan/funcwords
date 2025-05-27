@@ -43,7 +43,7 @@ def lang_detail(request, lang):
     langs_ct = lang_children_query.count()
     terms_query = models.Term.objects.values('name', 'slug').filter(language=lang_query.id).order_by('name')
     terms_ct = terms_query.count()
-    refs_query = models.Reference.objects.values('info').filter(languagenode=lang_query.id).order_by('info')
+    refs_query = models.Reference.objects.values().filter(languagenode=lang_query.id).order_by('info')
 
     paginator = Paginator(terms_query, _PAGE_ENTRIES)
     page_obj = paginator.get_page(request.GET.get("page"))
@@ -58,7 +58,7 @@ def term_detail(request, lang, term):
         raise Http404
 
     props_query = models.PropertyNode.objects.values('name', 'displaylinks', 'slug').filter(termproperty__term=term_query.id).order_by('termproperty__dispindex')
-    refs_query = models.Reference.objects.values('info').filter(term=term_query.id).order_by('info')
+    refs_query = models.Reference.objects.values().filter(term=term_query.id).order_by('info')
     return render(request, 'term_detail.html', { 'lang': lang_query, 'term': term_query, 'props': props_query, 'refs': refs_query })
 
 
@@ -81,7 +81,7 @@ def cat_detail(request, cat):
     cats_ct = cat_children_query.count()
     terms_query = models.Term.objects.values('name', 'slug', 'language__displayname', 'language__slug').filter(termproperty__prop=cat_query.id).order_by('name')
     terms_ct = terms_query.count()
-    refs_query = models.Reference.objects.values('info').filter(propertynode=cat_query.id).order_by('info')
+    refs_query = models.Reference.objects.values().filter(propertynode=cat_query.id).order_by('info')
 
     paginator = Paginator(terms_query, _PAGE_ENTRIES)
     page_obj = paginator.get_page(request.GET.get("page"))

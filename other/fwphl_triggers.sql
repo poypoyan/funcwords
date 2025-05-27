@@ -23,10 +23,6 @@ begin
         new.DisplayLinks = jsonb_insert(prev_json, '{-1}', jsonb_build_array(prev_slug, prev_name), true);
     end if;
 
-    if new.Info is null then
-        new.Info = '';
-    end if;
-
     return new;
 end;
 $$ language plpgsql;
@@ -79,10 +75,6 @@ begin
         new.DisplayLinks = jsonb_insert(prev_json, '{-1}', jsonb_build_array(prev_slug, prev_name), true);
     end if;
 
-    if new.Info is null then
-        new.Info = '';
-    end if;
-
     return new;
 end;
 $$ language plpgsql;
@@ -116,10 +108,6 @@ $$ language plpgsql;
 create or replace function populate_term_slug_bi() returns trigger as $$
 begin
     new.Slug = lower(replace(translate(new.Name, '()', ''), ' ', '-'));
-
-    if new.Info is null then
-        new.Info = '';
-    end if;
 
     return new;
 end;

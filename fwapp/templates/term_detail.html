@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load autolink %}
+{% load referencing %}
 {% block title %}{% block og_title %}{{ term.name }} ({{ lang.displayname }}) - {% endblock %}{% endblock %}
 {% block specific_head %}
 <meta name="description" content="Some information about the word {{ term.name }} from the {{ lang.displayname }} language/dialect."/>
@@ -24,18 +24,19 @@
 
 {% if term.info %}
   <br/>
-  {{ term.info|safe }}
+  {% citelink term.info refs as linked_info %}
+  {{ linked_info|safe }}
   <br/>
 {% endif %}
 
 </br/>
 <b>References:</b>
 <br/><br/>
-<ol>
+<ol start="0">
   {% if lang.nodetype == 0 or lang.nodetype == 1 %}<li>{{ lang.displayname }} speakers</li>{% endif %}
   {% for ref in refs %}
     {% autolink ref.info as linked_info %}
-    <li>{{ linked_info|safe }}</li>
+    <li id="ref-{{ forloop.counter }}">{{ linked_info|safe }}</li>
   {% endfor %}
 </ol>
 {% endblock %}
