@@ -35,7 +35,7 @@ rsync -avz . root@<VPS IP address>:~/the-app --exclude .git/
 This assumes that the current directory of terminal is this repo. Note that `the-app` directory will be created in the home folder (~) of the VPS, and the files will be copied to that directory.
 
 5. SSH to your VPS: `ssh root@<VPS IP address>`. After login, you'll be in home folder. Go to `the-app` directory and do the docker setup above. Website should now be up! But it's in HTTP.
-6. HTTP Secure (HTTPS) configuration in `docker-compose.yml` and `nginx.conf` are commented. Follow [this](https://certbot.eff.org/instructions?ws=nginx&os=snap) to create SSL certificate except do
+6. HTTP Secure (HTTPS) configuration in `docker-compose.yml`, `settings.py`, and `nginx.conf` are commented. Follow [this](https://certbot.eff.org/instructions?ws=nginx&os=snap) to create SSL certificate except do
 ```bash
 sudo certbot certonly --webroot -w /var/www/certbot/ -d example.com
 ```
