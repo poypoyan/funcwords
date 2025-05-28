@@ -38,8 +38,8 @@ makemigrations: ## Create new database migrations
 makemigrations-fwapp: ## Create new database migrations for fwapp
 	docker compose exec web python manage.py makemigrations fwapp
 
-static: ## Collect static files
-	docker compose exec web python manage.py collectstatic --noinput
+static: ## Collect static files (run as root in container)
+	docker compose exec -u 0 web python manage.py collectstatic --noinput
 
 superuser: ## Create superuser
 	docker compose exec web python manage.py createsuperuser

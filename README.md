@@ -19,7 +19,7 @@ Then `http://localhost` should now work, but without any "design" because static
 make makemigrations-fwapp   # run this once only. afterwards, run 'make makemigrations' instead.
 make migrate
 make static
-# replace "funcwords" with the name of folder where this is located
+# replace "funcwords" with the name of directory where this is located
 docker exec -i funcwords-db-1 psql -U user0 -d Function_Words < ./other/fwphl_triggers.sql
 docker exec -i funcwords-db-1 psql -U user0 -d Function_Words < ./other/0_tagalog_personal_pronouns.sql   # initial data
 ```
@@ -32,14 +32,16 @@ docker exec -i funcwords-db-1 psql -U user0 -d Function_Words < ./other/0_tagalo
 ```bash
 rsync -avz . root@<VPS IP address>:~/the-app --exclude .git/
 ```
-This assumes that the current directory of terminal is this repo. Note that `the-app` directory will be created in the home folder (~) of the VPS, and the files will be copied to that directory.
+This assumes that the current directory of terminal is this repo. Note that `the-app` directory will be created in the home directory (~) of the user (root in the case of the command above) in VPS, and the files will be copied to that directory.
 
-5. SSH to your VPS: `ssh root@<VPS IP address>`. After login, you'll be in home folder. Go to `the-app` directory and do the docker setup above. Website should now be up! But it's in HTTP.
+5. SSH to your VPS: `ssh root@<VPS IP address>`. After login, you'll be in home directory. Go to `the-app` directory and do the Docker setup above. Website should now be up! But it's in HTTP.
 6. HTTP Secure (HTTPS) configuration in `docker-compose.yml`, `settings.py`, and `nginx.conf` are commented. Follow [this](https://certbot.eff.org/instructions?ws=nginx&os=snap) to create SSL certificate except do
 ```bash
 sudo certbot certonly --webroot -w /var/www/certbot/ -d example.com
 ```
 for getting the certificate. Through webroot, certbot can automatically renew without needing to stop containers.
+
+**Update:** I now prefer [this setup](other/decouple-nginx.md), with changes before and during Step 5.
 
 ## Extra Stuff
 * We provide a Makefile for common commands for development.
