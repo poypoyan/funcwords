@@ -1,5 +1,5 @@
 # funcwords
-Function Words in Philippine Languages (FWPHL). Stack: Django, PostgreSQL. Now production ready with Gunicorn and Nginx.
+Function Words in Philippine Languages. Stack: Django, PostgreSQL. Now production ready with Gunicorn and Nginx.
 
 ## Docker Setup
 1. Make sure you have Docker and Make installed.
