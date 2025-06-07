@@ -29,7 +29,7 @@ class LanguageNode(models.Model):
     info = models.TextField(blank=True, db_default='')
     displayname = models.CharField(max_length=50)
     displaylinks = models.JSONField()
-    refs = models.ManyToManyField(Reference, help_text='In page, these are sorted by alphabetical order of Info field.<br/>')
+    refs = models.ManyToManyField(Reference, blank=True, help_text='In page, these are sorted by alphabetical order of Info field.<br/>')
     slug = models.SlugField()
 
     class Meta:
@@ -51,29 +51,29 @@ class LanguageOtherName(models.Model):
 
 
 class PropertyNode(models.Model):
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
     parentnode = models.ForeignKey('self', models.DO_NOTHING, db_column='parentnode', blank=True, null=True)
     info = models.TextField(blank=True, db_default='')
-    displayname = models.CharField(max_length=50)
+    displayname = models.CharField(max_length=100)
     displaylinks = models.JSONField()
-    refs = models.ManyToManyField(Reference, help_text='In page, these are sorted by alphabetical order of Info field.<br/>')
+    refs = models.ManyToManyField(Reference, blank=True, help_text='In page, these are sorted by alphabetical order of Info field.<br/>')
     slug = models.SlugField()
 
     class Meta:
         db_table = 'property_node'
+        unique_together = (('name', 'parentnode'),)
 
 
 class Term(models.Model):
-    name = models.CharField(max_length=50, help_text='Please capitalize and no diacritics. For new definition of duplicate term, add a number like "Kita (2)".')
-    headername = models.CharField(max_length=50, help_text='Please capitalize and you may add diacritics. This is the header in term page, and used in search.')
+    name = models.CharField(max_length=50, help_text='Please capitalize and you may add diacritics. This is the header in term page.')
     language = models.ForeignKey(LanguageNode, models.DO_NOTHING, db_column='language')
     info = models.TextField(blank=True, db_default='')
-    refs = models.ManyToManyField(Reference, help_text='In page, these are sorted by alphabetical order of Info field.<br/>')
+    linkname = models.CharField(max_length=50)
+    refs = models.ManyToManyField(Reference, blank=True, help_text='In page, these are sorted by alphabetical order of Info field.<br/>')
     slug = models.SlugField()
 
     class Meta:
         db_table = 'term'
-        unique_together = (('name', 'language'),)
 
 
 class TermProperty(models.Model):

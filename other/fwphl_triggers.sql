@@ -63,8 +63,14 @@ declare
     prev_dispname varchar(255);
     prev_json jsonb;
     prev_slug varchar(50);
+    count int;
 begin
-    new.Slug = lower(replace(new.Name, ' ', '-'));
+    select count(Id) into count from Property_Node where Name = new.Name;
+    if count > 0 then
+        new.Slug = concat(lower(replace(new.Name, ' ', '-')), '-', count + 1);
+    else
+        new.Slug = lower(replace(new.Name, ' ', '-'));
+    end if;
 
     if new.ParentNode is null then
         new.DisplayName = new.Name;
@@ -85,9 +91,15 @@ declare
     prev_dispname varchar(255);
     prev_json jsonb;
     prev_slug varchar(50);
+    count int;
 begin
     if new.name is distinct from old.name then
-        new.Slug = lower(replace(new.Name, ' ', '-'));
+        select count(Id) into count from Property_Node where Name = new.Name;
+        if count > 0 then
+            new.Slug = concat(lower(replace(new.Name, ' ', '-')), '-', count + 1);
+        else
+            new.Slug = lower(replace(new.Name, ' ', '-'));
+        end if;
     end if;
 
     if new.ParentNode is distinct from old.ParentNode then
@@ -106,17 +118,39 @@ end;
 $$ language plpgsql;
 
 create or replace function populate_term_slug_bi() returns trigger as $$
+declare
+    unaccented varchar(255);
+    count int;
 begin
-    new.Slug = lower(replace(translate(new.Name, '()', ''), ' ', '-'));
+    unaccented = unaccent(new.Name);
+    select count(Id) into count from Term where Language = New.Language and unaccent(Name) = unaccented;
+    if count > 0 then
+        new.Slug = concat(lower(replace(unaccented, ' ', '-')), '-', count + 1);
+        new.LinkName = concat(unaccented, ' (', count + 1, ')');
+    else
+        new.Slug = lower(replace(unaccented, ' ', '-'));
+        new.LinkName = unaccented;
+    end if;
 
     return new;
 end;
 $$ language plpgsql;
 
 create or replace function populate_term_slug_bu() returns trigger as $$
+declare
+    unaccented varchar(255);
+    count int;
 begin
     if new.Name is distinct from old.Name then
-        new.Slug = lower(replace(translate(new.Name, '()', ''), ' ', '-'));
+        unaccented = unaccent(new.Name);
+        select count(Id) into count from Term where Language = New.Language and unaccent(Name) = unaccented;
+        if count > 0 then
+            new.Slug = concat(lower(replace(unaccented, ' ', '-')), '-', count + 1);
+            new.LinkName = concat(unaccented, ' (', count + 1, ')');
+        else
+            new.Slug = lower(replace(unaccented, ' ', '-'));
+            new.LinkName = unaccented;
+        end if;
     end if;
 
     return new;

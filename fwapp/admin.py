@@ -70,10 +70,10 @@ class PropertyNodeAdmin(admin.ModelAdmin):
 
 @admin.register(Term)
 class TermAdmin(admin.ModelAdmin):
-    list_display = ('name', 'language__name')
-    search_fields = ('name',)
-    list_filter = ('name', 'language__name')
-    exclude = ('slug',)
+    list_display = ('linkname', 'language__name')
+    search_fields = ('linkname',)
+    list_filter = ('linkname', 'language__name')
+    exclude = ('slug', 'linkname')
     filter_horizontal = ('refs',)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -96,7 +96,7 @@ class TermPropertyAdmin(admin.ModelAdmin):
 
     @admin.display()
     def term_lang(self, obj):
-        return f'{obj.term.name}, {obj.term.language.name}'
+        return f'{obj.term.linkname}, {obj.term.language.name}'
 
 
 @admin.register(Reference)

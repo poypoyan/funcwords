@@ -41,7 +41,7 @@ def lang_detail(request, lang):
     lang_children_query = models.LanguageNode.objects.values('name', 'slug').filter(parentnode=lang_query.id).order_by('name')
     lang_othernames_query = models.LanguageOtherName.objects.values('name').filter(language=lang_query.id).order_by('name')
     langs_ct = lang_children_query.count()
-    terms_query = models.Term.objects.values('name', 'slug').filter(language=lang_query.id).order_by('name')
+    terms_query = models.Term.objects.values('linkname', 'slug').filter(language=lang_query.id).order_by('linkname')
     terms_ct = terms_query.count()
     refs_query = models.Reference.objects.values().filter(languagenode=lang_query.id).order_by('info')
 
@@ -79,7 +79,7 @@ def cat_detail(request, cat):
 
     cat_children_query = models.PropertyNode.objects.values('name', 'slug').filter(parentnode=cat_query.id).order_by('name')
     cats_ct = cat_children_query.count()
-    terms_query = models.Term.objects.values('name', 'slug', 'language__displayname', 'language__slug').filter(termproperty__prop=cat_query.id).order_by('name')
+    terms_query = models.Term.objects.values('linkname', 'slug', 'language__displayname', 'language__slug').filter(termproperty__prop=cat_query.id).order_by('linkname')
     terms_ct = terms_query.count()
     refs_query = models.Reference.objects.values().filter(propertynode=cat_query.id).order_by('info')
 
@@ -109,7 +109,7 @@ def search(request):
     # basic search (not full text)
     searched = form.cleaned_data['q']
     if form.cleaned_data['t'] == 'term':
-        results = models.Term.objects.values('name', 'slug', 'language__displayname', 'language__slug').filter(Q(headername__unaccent__trigram_similar=searched) | Q(headername__unaccent__icontains=searched)).order_by('name')
+        results = models.Term.objects.values('linkname', 'slug', 'language__displayname', 'language__slug').filter(Q(linkname__trigram_similar=searched) | Q(linkname__icontains=searched)).order_by('linkname')
     elif form.cleaned_data['t'] == 'language':
         results0 = models.LanguageNode.objects.values('displayname', 'slug').filter(Q(displayname__unaccent__trigram_similar=searched) | Q(displayname__unaccent__icontains=searched))
 
