@@ -1,10 +1,5 @@
 {% extends "base.html" %}
 {% load referencing %}
-{% block title %}{% block og_title %}{{ cat.displayname }} - {% endblock %}{% endblock %}
-{% block specific_head %}
-<meta name="description" content="Some information about {{ cat.displayname }}."/>
-<meta property="og:description" content="Some information about {{ cat.displayname }}."/>
-{% endblock %}
 {% block content %}
 <h1>{{ cat.displayname }}</h1>
 

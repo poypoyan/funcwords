@@ -1,10 +1,5 @@
 {% extends "base.html" %}
 {% load referencing %}
-{% block title %}{% block og_title %}{{ lang.displayname }} - {% endblock %}{% endblock %}
-{% block specific_head %}
-<meta name="description" content="Some information about {{ lang.displayname }} language/dialect/language group."/>
-<meta property="og:description" content="Some information about {{ lang.displayname }} language/dialect/language group."/>
-{% endblock %}
 {% block content %}
 <h1>{{ lang.displayname }}</h1>
 

@@ -12,15 +12,29 @@ _PAGE_ENTRIES = 30
 
 
 def error_404(request, exception):
-    return render(request, 'error_404.html', { 'is_error_page': True }, status=404)
+    return render(request, 'error_404.html',
+        {
+            'is_nofollow': True,
+            'title': 'Error 404'
+        },
+    status=404)
 
 
 def error_500(request):
-    return render(request, 'error_500.html', { 'is_error_page': True }, status=500)
+    return render(request, 'error_500.html',
+        {
+            'is_nofollow': True,
+            'title': 'Error 500'
+        },
+    status=500)
 
 
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'home.html',
+        {
+            'description': 'Start here to explore function words in various Philippine languages.'
+        }
+    )
 
 
 def langs(request):
@@ -29,7 +43,15 @@ def langs(request):
 
     paginator = Paginator(langs_query, _PAGE_ENTRIES)
     page_obj = paginator.get_page(request.GET.get("page"))
-    return render(request, 'langs.html', { 'langs': page_obj, 'langs_ct': langs_ct, 'per_page': _PAGE_ENTRIES })
+    return render(request, 'langs.html',
+        {
+            'langs': page_obj,
+            'langs_ct': langs_ct,
+            'per_page': _PAGE_ENTRIES,
+            'title': 'Languages',
+            'description': 'Current list of languages.'
+        }
+    )
 
 
 def lang_detail(request, lang):
@@ -47,7 +69,20 @@ def lang_detail(request, lang):
 
     paginator = Paginator(terms_query, _PAGE_ENTRIES)
     page_obj = paginator.get_page(request.GET.get("page"))
-    return render(request, 'lang_detail.html', { 'lang': lang_query, 'lang_children': lang_children_query, 'langs_ct': langs_ct,  'lang_on': lang_othernames_query, 'terms': page_obj, 'terms_ct': terms_ct, 'refs': refs_query, 'per_page': _PAGE_ENTRIES })
+    return render(request, 'lang_detail.html',
+        {
+            'lang': lang_query,
+            'lang_children': lang_children_query,
+            'langs_ct': langs_ct,
+            'lang_on': lang_othernames_query,
+            'terms': page_obj,
+            'terms_ct': terms_ct,
+            'refs': refs_query,
+            'per_page': _PAGE_ENTRIES,
+            'title': f'{ lang_query.displayname }',
+            'description': f'Some information about { lang_query.displayname } language/dialect/language group.'
+        }
+    )
 
 
 def term_detail(request, lang, term):
@@ -59,7 +94,16 @@ def term_detail(request, lang, term):
 
     props_query = models.PropertyNode.objects.values('name', 'displaylinks', 'slug').filter(termproperty__term=term_query.id).order_by('termproperty__dispindex')
     refs_query = models.Reference.objects.values().filter(term=term_query.id).order_by('info')
-    return render(request, 'term_detail.html', { 'lang': lang_query, 'term': term_query, 'props': props_query, 'refs': refs_query })
+    return render(request, 'term_detail.html',
+        {
+            'lang': lang_query,
+            'term': term_query,
+            'props': props_query,
+            'refs': refs_query,
+            'title': f'{ term_query.linkname } ({ lang_query['displayname'] })',
+            'description': f'Some information about the word { term_query.linkname } from the { lang_query['displayname'] } language/dialect.'
+        }
+    )
 
 
 def cats(request):
@@ -68,7 +112,15 @@ def cats(request):
 
     paginator = Paginator(cats_query, _PAGE_ENTRIES)
     page_obj = paginator.get_page(request.GET.get("page"))
-    return render(request, 'cats.html', { 'cats': page_obj, 'cats_ct': cats_ct, 'per_page': _PAGE_ENTRIES })
+    return render(request, 'cats.html',
+        {
+            'cats': page_obj,
+            'cats_ct': cats_ct,
+            'per_page': _PAGE_ENTRIES,
+            'title': 'Categories',
+            'description': 'Current list of categories for function words.'
+        }
+    )
 
 
 def cat_detail(request, cat):
@@ -85,7 +137,19 @@ def cat_detail(request, cat):
 
     paginator = Paginator(terms_query, _PAGE_ENTRIES)
     page_obj = paginator.get_page(request.GET.get("page"))
-    return render(request, 'cat_detail.html', { 'cat': cat_query, 'cat_children': cat_children_query, 'cats_ct': cats_ct, 'terms': page_obj, 'terms_ct': terms_ct, 'refs': refs_query , 'per_page': _PAGE_ENTRIES})
+    return render(request, 'cat_detail.html',
+        {
+            'cat': cat_query,
+            'cat_children': cat_children_query,
+            'cats_ct': cats_ct,
+            'terms': page_obj,
+            'terms_ct': terms_ct,
+            'refs': refs_query ,
+            'per_page': _PAGE_ENTRIES,
+            'title': f'{ cat_query.displayname }',
+            'description': f'Some information about { cat_query.displayname }.'
+        }
+    )
 
 
 def random_term(_):
@@ -100,7 +164,16 @@ def random_term(_):
 
 def search(request):
     if len(request.GET) == 0:
-        return render(request, 'search.html', { 'form': SearchForm(), 'type_select': None, 'results': None })
+        return render(request, 'search.html',
+            {
+                'form': SearchForm(),
+                'type_select': None,
+                'results': None,
+                'is_search': True,
+                'title': 'Search',
+                'description': 'Search for a term, language, or category.'
+            }
+        )
 
     form = SearchForm(request.GET)
     if not form.is_valid():
@@ -124,4 +197,16 @@ def search(request):
 
     paginator = Paginator(results, _PAGE_ENTRIES)
     page_obj = paginator.get_page(request.GET.get("page"))
-    return render(request, 'search.html', { 'form': form, 'type_select': form.cleaned_data['t'], 'results': page_obj, 'results_ct': results_ct, 'bef_get_params': urlencode(form.cleaned_data) + '&', 'per_page': _PAGE_ENTRIES })
+    return render(request, 'search.html',
+        {
+            'form': form,
+            'type_select': form.cleaned_data['t'],
+            'results': page_obj,
+            'results_ct': results_ct,
+            'bef_get_params': urlencode(form.cleaned_data) + '&',
+            'per_page': _PAGE_ENTRIES,
+            'is_search': True,
+            'is_nofollow': True,
+            'title': f'Search results for \'{ searched }\'',
+        }
+    )

@@ -1,19 +1,30 @@
 {% load static %}<!DOCTYPE html>
 <html>
   <head>
-    <title>{% block title %}{% endblock %}Function Words in Philippine Languages</title>
+    <title>{{ title }}{% if title %} - {% endif %}Function Words in Philippine Languages</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    {% if not is_error_page %}
-      <meta property="og:type" content="website"/>
-      <meta property="og:title" content="{% block og_title %}{% endblock %}Function Words in Philippine Languages"/>
-      <meta property="og:url" content="https://example.com{{ request.path }}"/>
-      <meta property="og:image" content="https://example.com{% static 'rooster.png' %}"/>
-      <link rel="canonical" href="https://example.com{{ request.path }}"/>
+    {% if not is_nofollow %}
+    <meta name="description" content="{{ description }}"/>
+    <meta name="robots" content="follow, index, max-snippet:-1"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="{{ title }}{% if title %} - {% endif %}Function Words in Philippine Languages"/>
+    <meta property="og:description" content="{{ description }}"/>
+    <meta property="og:url" content="https://example.com{{ request.path }}"/>
+    <meta property="og:image" content="https://example.com{% static 'rooster.png' %}"/>
+    <link rel="canonical" href="https://example.com{{ request.path }}"/>
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="{{ title }}{% if title %} - {% endif %}Function Words in Philippine Languages"/>
+    <meta name="twitter:description" content="{{ description }}"/>
+    <meta name="twitter:image" content="https://example.com{% static 'rooster.png' %}"/>
+    {% else %}
+    <meta name="robots" content="noindex, nofollow"/>
     {% endif %}
     <link rel="stylesheet" type="text/css" href="{% static 'style_base.css' %}"/>
     <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}"/>
-    {% block specific_head %}{% endblock %}
+    {% if is_search %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style_search.css' %}"/>
+    {% endif %}
     <script src="{% static 'functions.js' %}"></script>
   </head>
 <body>
