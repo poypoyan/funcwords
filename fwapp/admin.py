@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.forms import ModelChoiceField
+from django.db.models import Q
 from .models import LanguageNode, LanguageOtherName, PropertyNode, Term, TermProperty, Reference
 
 
@@ -13,11 +14,25 @@ class TermForeignKeyDropDownDisp(ModelChoiceField):
         return f'{obj.name}, {obj.language.name}'
 
 
+class LanguageStrictFilter(admin.SimpleListFilter):
+    title = 'language'
+    parameter_name = 'language__name'
+
+    def lookups(self, request, model_admin):
+        return [(c.name, c.name) for c in LanguageNode.objects.filter(Q(nodetype=0) | Q(nodetype=1))]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(language__name=self.value())
+        else:
+            return queryset
+
+
 @admin.register(LanguageNode)
 class LanguageNodeAdmin(admin.ModelAdmin):
     list_display = ('name', 'nodetype', 'parentnode__name')
     search_fields = ('name',)
-    list_filter = ('nodetype', 'parentnode__name')
+    list_filter = ('nodetype',)
     exclude = ('displayname', 'displaylinks', 'slug')
     filter_horizontal = ('refs',)
 
@@ -38,7 +53,6 @@ class LanguageNodeAdmin(admin.ModelAdmin):
 @admin.register(LanguageOtherName)
 class LanguageOtherNameAdmin(admin.ModelAdmin):
     search_fields = ('name', 'language')
-    list_filter = ('name', 'language')
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'language':
@@ -50,7 +64,6 @@ class LanguageOtherNameAdmin(admin.ModelAdmin):
 class PropertyNodeAdmin(admin.ModelAdmin):
     list_display = ('name', 'parentnode__name')
     search_fields = ('name',)
-    list_filter = ('name', 'parentnode__name')
     exclude = ('displayname', 'displaylinks', 'slug')
     filter_horizontal = ('refs',)
 
@@ -72,7 +85,7 @@ class PropertyNodeAdmin(admin.ModelAdmin):
 class TermAdmin(admin.ModelAdmin):
     list_display = ('linkname', 'language__name')
     search_fields = ('linkname',)
-    list_filter = ('linkname', 'language__name')
+    list_filter = (LanguageStrictFilter,)
     exclude = ('slug', 'linkname')
     filter_horizontal = ('refs',)
 
@@ -84,8 +97,8 @@ class TermAdmin(admin.ModelAdmin):
 
 @admin.register(TermProperty)
 class TermPropertyAdmin(admin.ModelAdmin):
-    list_display = ('term_lang', 'prop__name', 'dispindex')
-    list_filter = ('term__name', 'prop__name')
+    list_display = ('term_lang', 'prop__displayname', 'dispindex')
+    search_fields = ('term__linkname', 'prop__displayname')
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'term':
