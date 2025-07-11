@@ -63,469 +63,416 @@ select 'Inclusive', Id from Property_Node where Name = 'Plural';
 insert into Property_Node (Name, ParentNode)
 select 'Exclusive', Id from Property_Node where Name = 'Plural';
 
+do $$
+declare
+    term_id Term.Id%type;
+begin
+
 -- Nominative series ("ang" form)
 -- Tagalog 'Ako'
 insert into Term (Name, Language)
-select 'Akó', Id from Language_Node where Name = 'Tagalog';
+select 'Akó', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Ako' and Property_Node.Name = '1st Person';
+select term_id, Id from Property_Node where Name = '1st Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Ako' and Property_Node.Name = 'Singular';
+select term_id, Id from Property_Node where Name = 'Singular';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Ako' and Property_Node.Name = 'Nominative';
+select term_id, Id from Property_Node where Name = 'Nominative';
 
 -- Tagalog 'Ikaw'
 insert into Term (Name, Language)
-select 'Ikáw', Id from Language_Node where Name = 'Tagalog';
+select 'Ikáw', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Ikaw' and Property_Node.Name = '2nd Person';
+select term_id, Id from Property_Node where Name = '2nd Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Ikaw' and Property_Node.Name = 'Singular';
+select term_id, Id from Property_Node where Name = 'Singular';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Ikaw' and Property_Node.Name = 'Nominative';
+select term_id, Id from Property_Node where Name = 'Nominative';
 
 -- Tagalog 'Ka'
 insert into Term (Name, Language)
-select 'Ka', Id from Language_Node where Name = 'Tagalog';
+select 'Ka', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Ka' and Property_Node.Name = '2nd Person';
+select term_id, Id from Property_Node where Name = '2nd Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Ka' and Property_Node.Name = 'Singular';
+select term_id, Id from Property_Node where Name = 'Singular';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Ka' and Property_Node.Name = 'Nominative';
+select term_id, Id from Property_Node where Name = 'Nominative';
 
 -- Tagalog 'Siya'
 insert into Term (Name, Language)
-select 'Siyá', Id from Language_Node where Name = 'Tagalog';
+select 'Siyá', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Siya' and Property_Node.Name = '3rd Person';
+select term_id, Id from Property_Node where Name = '3rd Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Siya' and Property_Node.Name = 'Singular';
+select term_id, Id from Property_Node where Name = 'Singular';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Siya' and Property_Node.Name = 'Nominative';
+select term_id, Id from Property_Node where Name = 'Nominative';
 
 -- Tagalog 'Kita' ("I to you"). Nominative only
 insert into Term (Name, Language)
-select 'Kitá', Id from Language_Node where Name = 'Tagalog';
+select 'Kitá', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kita' and Property_Node.Name = '2nd Person with 1st Person';
+select term_id, Id from Property_Node where Name = '2nd Person with 1st Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kita' and Property_Node.Name = 'Singular';
+select term_id, Id from Property_Node where Name = 'Singular';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kita' and Property_Node.Name = 'Nominative';
+select term_id, Id from Property_Node where Name = 'Nominative';
 
 -- Tagalog 'Kita' (Dual)
 insert into Term (Name, Language)
-select 'Kitá', Id from Language_Node where Name = 'Tagalog';
+select 'Kitá', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kita (2)' and Property_Node.Name = '1st Person';
+select term_id, Id from Property_Node where Name = '1st Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kita (2)' and Property_Node.Name = 'Dual';
+select term_id, Id from Property_Node where Name = 'Dual';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kita (2)' and Property_Node.Name = 'Nominative';
+select term_id, Id from Property_Node where Name = 'Nominative';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kita (2)' and Property_Node.Name = 'Archaic';
+select term_id, Id from Property_Node where Name = 'Archaic';
 
 -- Tagalog 'Kata'
 insert into Term (Name, Language)
-select 'Katá', Id from Language_Node where Name = 'Tagalog';
+select 'Katá', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kata' and Property_Node.Name = '1st Person';
+select term_id, Id from Property_Node where Name = '1st Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kata' and Property_Node.Name = 'Dual';
+select term_id, Id from Property_Node where Name = 'Dual';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kata' and Property_Node.Name = 'Nominative';
+select term_id, Id from Property_Node where Name = 'Nominative';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kata' and Property_Node.Name = 'Archaic';
+select term_id, Id from Property_Node where Name = 'Archaic';
 
 -- Tagalog 'Tayo'
 insert into Term (Name, Language)
-select 'Táyo', Id from Language_Node where Name = 'Tagalog';
+select 'Táyo', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Tayo' and Property_Node.Name = '1st Person';
+select term_id, Id from Property_Node where Name = '1st Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Tayo' and Property_Node.Name = 'Inclusive';
+select term_id, Id from Property_Node where Name = 'Inclusive';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Tayo' and Property_Node.Name = 'Nominative';
+select term_id, Id from Property_Node where Name = 'Nominative';
 
 -- Tagalog 'Kami'
 insert into Term (Name, Language)
-select 'Kamí', Id from Language_Node where Name = 'Tagalog';
+select 'Kamí', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kami' and Property_Node.Name = '1st Person';
+select term_id, Id from Property_Node where Name = '1st Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kami' and Property_Node.Name = 'Exclusive';
+select term_id, Id from Property_Node where Name = 'Exclusive';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kami' and Property_Node.Name = 'Nominative';
+select term_id, Id from Property_Node where Name = 'Nominative';
 
 -- Tagalog 'Kayo'
 insert into Term (Name, Language)
-select 'Kayó', Id from Language_Node where Name = 'Tagalog';
+select 'Kayó', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kayo' and Property_Node.Name = '2nd Person';
+select term_id, Id from Property_Node where Name = '2nd Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kayo' and Property_Node.Name = 'Plural';
+select term_id, Id from Property_Node where Name = 'Plural';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kayo' and Property_Node.Name = 'Nominative';
+select term_id, Id from Property_Node where Name = 'Nominative';
 
 -- Tagalog 'Sila'
 insert into Term (Name, Language)
-select 'Silá', Id from Language_Node where Name = 'Tagalog';
+select 'Silá', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Sila' and Property_Node.Name = '3rd Person';
+select term_id, Id from Property_Node where Name = '3rd Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Sila' and Property_Node.Name = 'Plural';
+select term_id, Id from Property_Node where Name = 'Plural';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Sila' and Property_Node.Name = 'Nominative';
+select term_id, Id from Property_Node where Name = 'Nominative';
 
 -- Genitive series ("ng" form)
 -- Tagalog 'Ko'
 insert into Term (Name, Language)
-select 'Ko', Id from Language_Node where Name = 'Tagalog';
+select 'Ko', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Ko' and Property_Node.Name = '1st Person';
+select term_id, Id from Property_Node where Name = '1st Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Ko' and Property_Node.Name = 'Singular';
+select term_id, Id from Property_Node where Name = 'Singular';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Ko' and Property_Node.Name = 'Genitive';
+select term_id, Id from Property_Node where Name = 'Genitive';
 
 -- Tagalog 'Mo'
 insert into Term (Name, Language)
-select 'Mo', Id from Language_Node where Name = 'Tagalog';
+select 'Mo', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Mo' and Property_Node.Name = '2nd Person';
+select term_id, Id from Property_Node where Name = '2nd Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Mo' and Property_Node.Name = 'Singular';
+select term_id, Id from Property_Node where Name = 'Singular';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Mo' and Property_Node.Name = 'Genitive';
+select term_id, Id from Property_Node where Name = 'Genitive';
 
 -- Tagalog 'Niya'
 insert into Term (Name, Language)
-select 'Niyá', Id from Language_Node where Name = 'Tagalog';
+select 'Niyá', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Niya' and Property_Node.Name = '3rd Person';
+select term_id, Id from Property_Node where Name = '3rd Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Niya' and Property_Node.Name = 'Singular';
+select term_id, Id from Property_Node where Name = 'Singular';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Niya' and Property_Node.Name = 'Genitive';
+select term_id, Id from Property_Node where Name = 'Genitive';
 
 -- Tagalog 'Nita'
 insert into Term (Name, Language)
-select 'Nitá', Id from Language_Node where Name = 'Tagalog';
+select 'Nitá', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Nita' and Property_Node.Name = '1st Person';
+select term_id, Id from Property_Node where Name = '1st Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Nita' and Property_Node.Name = 'Dual';
+select term_id, Id from Property_Node where Name = 'Dual';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Nita' and Property_Node.Name = 'Genitive';
+select term_id, Id from Property_Node where Name = 'Genitive';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Nita' and Property_Node.Name = 'Archaic';
+select term_id, Id from Property_Node where Name = 'Archaic';
 
 -- Tagalog 'Natin'
 insert into Term (Name, Language)
-select 'Nátin', Id from Language_Node where Name = 'Tagalog';
+select 'Nátin', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Natin' and Property_Node.Name = '1st Person';
+select term_id, Id from Property_Node where Name = '1st Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Natin' and Property_Node.Name = 'Inclusive';
+select term_id, Id from Property_Node where Name = 'Inclusive';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Natin' and Property_Node.Name = 'Genitive';
+select term_id, Id from Property_Node where Name = 'Genitive';
 
 -- Tagalog 'Namin'
 insert into Term (Name, Language)
-select 'Námin', Id from Language_Node where Name = 'Tagalog';
+select 'Námin', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Namin' and Property_Node.Name = '1st Person';
+select term_id, Id from Property_Node where Name = '1st Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Namin' and Property_Node.Name = 'Exclusive';
+select term_id, Id from Property_Node where Name = 'Exclusive';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Namin' and Property_Node.Name = 'Genitive';
+select term_id, Id from Property_Node where Name = 'Genitive';
 
 -- Tagalog 'Ninyo'
 insert into Term (Name, Language)
-select 'Ninyó', Id from Language_Node where Name = 'Tagalog';
+select 'Ninyó', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Ninyo' and Property_Node.Name = '2nd Person';
+select term_id, Id from Property_Node where Name = '2nd Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Ninyo' and Property_Node.Name = 'Plural';
+select term_id, Id from Property_Node where Name = 'Plural';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Ninyo' and Property_Node.Name = 'Genitive';
+select term_id, Id from Property_Node where Name = 'Genitive';
 
 -- Tagalog 'Niyo'
 insert into Term (Name, Language)
-select 'Niyó', Id from Language_Node where Name = 'Tagalog';
+select 'Niyó', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Niyo' and Property_Node.Name = '2nd Person';
+select term_id, Id from Property_Node where Name = '2nd Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Niyo' and Property_Node.Name = 'Plural';
+select term_id, Id from Property_Node where Name = 'Plural';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Niyo' and Property_Node.Name = 'Genitive';
+select term_id, Id from Property_Node where Name = 'Genitive';
 
 -- Tagalog 'Nila'
 insert into Term (Name, Language)
-select 'Nilá', Id from Language_Node where Name = 'Tagalog';
+select 'Nilá', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Nila' and Property_Node.Name = '3rd Person';
+select term_id, Id from Property_Node where Name = '3rd Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Nila' and Property_Node.Name = 'Plural';
+select term_id, Id from Property_Node where Name = 'Plural';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Nila' and Property_Node.Name = 'Genitive';
+select term_id, Id from Property_Node where Name = 'Genitive';
 
 -- Oblique series ("sa" form)
 -- Tagalog 'Akin'
 insert into Term (Name, Language)
-select 'Ákin', Id from Language_Node where Name = 'Tagalog';
+select 'Ákin', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Akin' and Property_Node.Name = '1st Person';
+select term_id, Id from Property_Node where Name = '1st Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Akin' and Property_Node.Name = 'Singular';
+select term_id, Id from Property_Node where Name = 'Singular';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Akin' and Property_Node.Name = 'Oblique';
+select term_id, Id from Property_Node where Name = 'Oblique';
 
 -- Tagalog 'Iyo'
 insert into Term (Name, Language)
-select 'Iyó', Id from Language_Node where Name = 'Tagalog';
+select 'Iyó', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Iyo' and Property_Node.Name = '2nd Person';
+select term_id, Id from Property_Node where Name = '2nd Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Iyo' and Property_Node.Name = 'Singular';
+select term_id, Id from Property_Node where Name = 'Singular';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Iyo' and Property_Node.Name = 'Oblique';
+select term_id, Id from Property_Node where Name = 'Oblique';
 
 -- Tagalog 'Kaniya'
 insert into Term (Name, Language)
-select 'Kaniyá', Id from Language_Node where Name = 'Tagalog';
+select 'Kaniyá', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kaniya' and Property_Node.Name = '3rd Person';
+select term_id, Id from Property_Node where Name = '3rd Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kaniya' and Property_Node.Name = 'Singular';
+select term_id, Id from Property_Node where Name = 'Singular';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kaniya' and Property_Node.Name = 'Oblique';
+select term_id, Id from Property_Node where Name = 'Oblique';
 
 -- Tagalog 'Kanita'
 insert into Term (Name, Language)
-select 'Kanitá', Id from Language_Node where Name = 'Tagalog';
+select 'Kanitá', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kanita' and Property_Node.Name = '1st Person';
+select term_id, Id from Property_Node where Name = '1st Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kanita' and Property_Node.Name = 'Dual';
+select term_id, Id from Property_Node where Name = 'Dual';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kanita' and Property_Node.Name = 'Oblique';
+select term_id, Id from Property_Node where Name = 'Oblique';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kanita' and Property_Node.Name = 'Archaic';
+select term_id, Id from Property_Node where Name = 'Archaic';
 
 -- Tagalog 'Atin'
 insert into Term (Name, Language)
-select 'Átin', Id from Language_Node where Name = 'Tagalog';
+select 'Átin', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Atin' and Property_Node.Name = '1st Person';
+select term_id, Id from Property_Node where Name = '1st Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Atin' and Property_Node.Name = 'Inclusive';
+select term_id, Id from Property_Node where Name = 'Inclusive';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Atin' and Property_Node.Name = 'Oblique';
+select term_id, Id from Property_Node where Name = 'Oblique';
 
 -- Tagalog 'Amin'
 insert into Term (Name, Language)
-select 'Ámin', Id from Language_Node where Name = 'Tagalog';
+select 'Ámin', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Amin' and Property_Node.Name = '1st Person';
+select term_id, Id from Property_Node where Name = '1st Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Amin' and Property_Node.Name = 'Exclusive';
+select term_id, Id from Property_Node where Name = 'Exclusive';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Amin' and Property_Node.Name = 'Oblique';
+select term_id, Id from Property_Node where Name = 'Oblique';
 
 -- Tagalog 'Inyo'
 insert into Term (Name, Language)
-select 'Inyó', Id from Language_Node where Name = 'Tagalog';
+select 'Inyó', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Inyo' and Property_Node.Name = '2nd Person';
+select term_id, Id from Property_Node where Name = '2nd Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Inyo' and Property_Node.Name = 'Plural';
+select term_id, Id from Property_Node where Name = 'Plural';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Inyo' and Property_Node.Name = 'Oblique';
+select term_id, Id from Property_Node where Name = 'Oblique';
 
 -- Tagalog 'Kanila'
 insert into Term (Name, Language)
-select 'Kanilá', Id from Language_Node where Name = 'Tagalog';
+select 'Kanilá', Id from Language_Node where Name = 'Tagalog'
+returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kanila' and Property_Node.Name = '3rd Person';
+select term_id, Id from Property_Node where Name = '3rd Person';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kanila' and Property_Node.Name = 'Plural';
+select term_id, Id from Property_Node where Name = 'Plural';
 
 insert into Term_Property (Term, Prop)
-select Term.Id, Property_Node.Id from Term
-inner join Property_Node on Term.LinkName = 'Kanila' and Property_Node.Name = 'Oblique';
+select term_id, Id from Property_Node where Name = 'Oblique';
+
+end $$
