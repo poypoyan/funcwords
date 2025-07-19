@@ -11,5 +11,6 @@ docker-compose.yml
 **/*.py[cod]
 fwvenv/
 other
+mount
 
 node_modules/

@@ -45,15 +45,19 @@ for getting the certificate. Through webroot, certbot can automatically renew wi
 
 ## Extra Stuff
 * We provide a Makefile for common commands for development.
-* Docker Shell:
+* Docker shell:
 ```bash
 make shell
 ```
-
-* PostgreSQL Command Line:
+* Django shell:
+```bash
+make django-shell
+```
+* PostgreSQL command line:
 ```bash
 docker exec -it funcwords-db-1 psql -d Function_Words -U user0
 ```
+* Want to run Python scripts "from outside" (e.g., to insert data)? [Here](other/volume-mount.md) is a tutorial.
 
 ## License
 Distributed under the MIT software license. See the accompanying

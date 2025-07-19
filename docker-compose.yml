@@ -28,6 +28,7 @@ services:
       - 8000
     volumes:
       - static_vol:/app/static
+      - ./mount:/app/mount
     env_file:
       - .env
     depends_on:

@@ -26,7 +26,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy project
 COPY . .
-RUN chmod +x /app/entrypoint.sh
+RUN chmod +x entrypoint.sh
 
 # Chown all the files to the app user
 RUN chown -R app:app .
