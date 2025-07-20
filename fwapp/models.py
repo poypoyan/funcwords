@@ -11,7 +11,7 @@ from django.db.models import Q
 
 class Reference(models.Model):
     name = models.CharField(max_length=50, unique=True, help_text='Codename for foreign key INSERT INTO.')
-    info = models.TextField(db_default='')
+    info = models.TextField(db_default='', help_text='Kindly URI encode unsafe characters in URLs.')
 
     class Meta:
         db_table = 'reference'

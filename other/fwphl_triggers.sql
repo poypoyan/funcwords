@@ -102,7 +102,7 @@ begin
         end if;
     end if;
 
-    if new.ParentNode is distinct from old.ParentNode then
+    if (new.name is distinct from old.name) or (new.ParentNode is distinct from old.ParentNode) then
         if new.ParentNode is null then
             new.DisplayName = new.Name;
             new.DisplayLinks = '[]';
