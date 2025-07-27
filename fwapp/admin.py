@@ -11,7 +11,7 @@ class ForeignKeyDropDownDisp(ModelChoiceField):
 
 class TermForeignKeyDropDownDisp(ModelChoiceField):
     def label_from_instance(self, obj):
-        return f'{obj.name}, {obj.language.name}'
+        return f'{obj.linkname}, {obj.language.name}'
 
 
 class LanguageStrictFilter(admin.SimpleListFilter):

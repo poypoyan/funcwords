@@ -55,7 +55,7 @@ insert into Property_Node (Name, ParentNode)
 select '3rd Person', Id from Property_Node where Name = 'Personal';
 
 insert into Property_Node (Name, ParentNode)
-select '2nd Person with 1st Person', Id from Property_Node where Name = 'Personal';
+select '2nd Person by 1st Person', Id from Property_Node where Name = 'Personal';
 
 insert into Property_Node (Name, ParentNode)
 select 'Inclusive', Id from Property_Node where Name = 'Plural';
@@ -131,7 +131,7 @@ select 'Kitá', Id from Language_Node where Name = 'Tagalog'
 returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
-select term_id, Id from Property_Node where Name = '2nd Person with 1st Person';
+select term_id, Id from Property_Node where Name = '2nd Person by 1st Person';
 
 insert into Term_Property (Term, Prop)
 select term_id, Id from Property_Node where Name = 'Singular';
