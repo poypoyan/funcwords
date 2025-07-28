@@ -39,9 +39,9 @@ class LanguageNodeAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'parentnode':
             if 'object_id' in request.resolver_match.kwargs:
-                return ForeignKeyDropDownDisp(queryset=LanguageNode.objects.exclude(id=request.resolver_match.kwargs['object_id']))
+                return ForeignKeyDropDownDisp(queryset=LanguageNode.objects.exclude(id=request.resolver_match.kwargs['object_id']).order_by('name'))
             else:
-                return ForeignKeyDropDownDisp(queryset=LanguageNode.objects)
+                return ForeignKeyDropDownDisp(queryset=LanguageNode.objects.order_by('name'))
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def get_form(self, request, obj=None, **kwargs):
@@ -56,7 +56,7 @@ class LanguageOtherNameAdmin(admin.ModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'language':
-            return ForeignKeyDropDownDisp(queryset=LanguageNode.objects.exclude(nodetype=2))
+            return ForeignKeyDropDownDisp(queryset=LanguageNode.objects.exclude(nodetype=2).order_by('name'))
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
@@ -70,9 +70,9 @@ class PropertyNodeAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'parentnode':
             if 'object_id' in request.resolver_match.kwargs:
-                return ForeignKeyDropDownDisp(queryset=PropertyNode.objects.exclude(id=request.resolver_match.kwargs['object_id']))
+                return ForeignKeyDropDownDisp(queryset=PropertyNode.objects.exclude(id=request.resolver_match.kwargs['object_id']).order_by('name'))
             else:
-                return ForeignKeyDropDownDisp(queryset=PropertyNode.objects)
+                return ForeignKeyDropDownDisp(queryset=PropertyNode.objects.order_by('name'))
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def get_form(self, request, obj=None, **kwargs):
@@ -91,20 +91,20 @@ class TermAdmin(admin.ModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'language':
-            return ForeignKeyDropDownDisp(queryset=LanguageNode.objects.exclude(nodetype=2))
+            return ForeignKeyDropDownDisp(queryset=LanguageNode.objects.exclude(nodetype=2).order_by('name'))
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 @admin.register(TermProperty)
 class TermPropertyAdmin(admin.ModelAdmin):
     list_display = ('term_lang', 'prop__displayname', 'dispindex')
-    search_fields = ('term__linkname', 'prop__displayname')
+    search_fields = ('term__linkname', 'term__language__name', 'prop__displayname')
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'term':
-            return TermForeignKeyDropDownDisp(queryset=Term.objects.all())
+            return TermForeignKeyDropDownDisp(queryset=Term.objects.all().order_by('name'))
         if db_field.name == 'prop':
-            return ForeignKeyDropDownDisp(queryset=PropertyNode.objects.all())
+            return ForeignKeyDropDownDisp(queryset=PropertyNode.objects.all().order_by('name'))
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     @admin.display()
