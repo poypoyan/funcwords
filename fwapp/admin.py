@@ -6,7 +6,7 @@ from .models import LanguageNode, LanguageOtherName, PropertyNode, Term, TermPro
 
 class ForeignKeyDropDownDisp(ModelChoiceField):
     def label_from_instance(self, obj):
-        return obj.name
+        return obj.displayname
 
 
 class TermForeignKeyDropDownDisp(ModelChoiceField):
