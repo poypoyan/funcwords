@@ -27,6 +27,7 @@ class LanguageNode(models.Model):
     nodetype = models.SmallIntegerField(help_text='0 = language, 1 = dialect, 2 = group.')
     parentnode = models.ForeignKey('self', models.DO_NOTHING, db_column='parentnode', blank=True, null=True)
     info = models.TextField(blank=True, db_default='')
+    glottolog = models.CharField(max_length=50, blank=True, null=True)
     displayname = models.CharField(max_length=50)
     displaylinks = models.JSONField()
     refs = models.ManyToManyField(Reference, blank=True, help_text='In page, these are sorted by alphabetical order of Info field.<br/>')
