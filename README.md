@@ -28,7 +28,7 @@ docker exec -i funcwords-db-1 psql -U user0 -d Function_Words < ./other/0_tagalo
 1. Grind to have some money (😫) to buy a VPS (ideally Ubuntu with Docker installed) and a domain. Then follow the steps provided by the VPS provider to connect the two.
 2. Modify `.env` with secure values. Set `DEBUG` to False and `DJANGO_ALLOWED_HOSTS` to your domain with dot in the beginning, like `.example.com`. Replace every instance of `example.com` in this repo with your domain.
 3. Uncomment the `.env` in `.gitignore`. Do NOT upload prod environment variables anywhere!
-4. Copy files from local to VPS using rsync:
+4. (**Update:** I now prefer [pulling from Github](https://github.com/poypoyan/funcwords-gh-actions).) Copy files from local to VPS using rsync:
 ```bash
 rsync -avz . root@<VPS IP address>:~/the-app --exclude .git/
 ```
