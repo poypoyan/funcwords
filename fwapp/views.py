@@ -182,6 +182,7 @@ def search(request):
     # basic search (not full text)
     searched = form.cleaned_data['q']
     if form.cleaned_data['t'] == 'term':
+        # linkname is already unaccented
         results = models.Term.objects.values('linkname', 'slug', 'language__displayname', 'language__slug').filter(Q(linkname__trigram_similar=searched) | Q(linkname__icontains=searched)).order_by('linkname')
     elif form.cleaned_data['t'] == 'language':
         results0 = models.LanguageNode.objects.values('displayname', 'slug').filter(Q(displayname__unaccent__trigram_similar=searched) | Q(displayname__unaccent__icontains=searched))
@@ -191,7 +192,7 @@ def search(request):
 
         results = results0.union(results1_lang).order_by('displayname')
     elif form.cleaned_data['t'] == 'category':
-        results = models.PropertyNode.objects.values('displayname', 'slug').filter(Q(displayname__trigram_similar=searched) | Q(displayname__icontains=searched)).order_by('displayname')
+        results = models.PropertyNode.objects.values('displayname', 'slug').filter(Q(displayname__unaccent__trigram_similar=searched) | Q(displayname__unaccent__icontains=searched)).order_by('displayname')
 
     results_ct = results.count()
 
