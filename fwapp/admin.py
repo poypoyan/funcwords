@@ -52,7 +52,8 @@ class LanguageNodeAdmin(admin.ModelAdmin):
 
 @admin.register(LanguageOtherName)
 class LanguageOtherNameAdmin(admin.ModelAdmin):
-    search_fields = ('name', 'language')
+    list_display = ('name', 'language__name')
+    search_fields = ('name', 'language__name')
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'language':
