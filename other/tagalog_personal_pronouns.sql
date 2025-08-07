@@ -362,7 +362,7 @@ select term_id, Id from Property_Node where Name = 'Genitive';
 -- Oblique series ("sa" form)
 -- Tagalog 'Akin'
 insert into Term (Name, Language)
-select 'Ákin', Id from Language_Node where Name = 'Tagalog'
+select 'Sa ákin', Id from Language_Node where Name = 'Tagalog'
 returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
@@ -376,7 +376,7 @@ select term_id, Id from Property_Node where Name = 'Oblique';
 
 -- Tagalog 'Iyo'
 insert into Term (Name, Language)
-select 'Iyó', Id from Language_Node where Name = 'Tagalog'
+select 'Sa iyó', Id from Language_Node where Name = 'Tagalog'
 returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
@@ -390,7 +390,7 @@ select term_id, Id from Property_Node where Name = 'Oblique';
 
 -- Tagalog 'Kaniya'
 insert into Term (Name, Language)
-select 'Kaniyá', Id from Language_Node where Name = 'Tagalog'
+select 'Sa kaniyá', Id from Language_Node where Name = 'Tagalog'
 returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
@@ -404,7 +404,7 @@ select term_id, Id from Property_Node where Name = 'Oblique';
 
 -- Tagalog 'Kanita'
 insert into Term (Name, Language)
-select 'Kanitá', Id from Language_Node where Name = 'Tagalog'
+select 'Sa kanitá', Id from Language_Node where Name = 'Tagalog'
 returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
@@ -421,7 +421,7 @@ select term_id, Id from Property_Node where Name = 'Archaic';
 
 -- Tagalog 'Atin'
 insert into Term (Name, Language)
-select 'Átin', Id from Language_Node where Name = 'Tagalog'
+select 'Sa átin', Id from Language_Node where Name = 'Tagalog'
 returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
@@ -435,7 +435,7 @@ select term_id, Id from Property_Node where Name = 'Oblique';
 
 -- Tagalog 'Amin'
 insert into Term (Name, Language)
-select 'Ámin', Id from Language_Node where Name = 'Tagalog'
+select 'Sa ámin', Id from Language_Node where Name = 'Tagalog'
 returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
@@ -449,7 +449,7 @@ select term_id, Id from Property_Node where Name = 'Oblique';
 
 -- Tagalog 'Inyo'
 insert into Term (Name, Language)
-select 'Inyó', Id from Language_Node where Name = 'Tagalog'
+select 'Sa inyó', Id from Language_Node where Name = 'Tagalog'
 returning Id into term_id;
 
 insert into Term_Property (Term, Prop)
@@ -463,7 +463,7 @@ select term_id, Id from Property_Node where Name = 'Oblique';
 
 -- Tagalog 'Kanila'
 insert into Term (Name, Language)
-select 'Kanilá', Id from Language_Node where Name = 'Tagalog'
+select 'Sa kanilá', Id from Language_Node where Name = 'Tagalog'
 returning Id into term_id;
 
 insert into Term_Property (Term, Prop)

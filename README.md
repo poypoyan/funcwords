@@ -21,8 +21,9 @@ make migrate
 make static
 # replace "funcwords" with the name of directory where this is located
 docker exec -i funcwords-db-1 psql -U user0 -d Function_Words < ./other/fwphl_triggers.sql
-docker exec -i funcwords-db-1 psql -U user0 -d Function_Words < ./other/0_tagalog_personal_pronouns.sql   # initial data
+docker exec -i funcwords-db-1 psql -U user0 -d Function_Words < ./other/tagalog_personal_pronouns.sql   # initial data
 ```
+Note that the "funcwords" in `funcwords-db-1` is the name of the directory of this repo, thus change this appropriately if the directory name is different.
 
 ## A Production Experience
 1. Grind to have some money (😫) to buy a VPS (ideally Ubuntu with Docker installed) and a domain. Then follow the steps provided by the VPS provider to connect the two.
