@@ -17,6 +17,10 @@
 {% endfor %}
 <br/>
 
+<br/>
+<a href="{{ request.path }}/other">Other terms like this</a>
+<br/>
+
 {% if term.info %}
   <br/>
   {% citelink term.info refs as linked_info %}

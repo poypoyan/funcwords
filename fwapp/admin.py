@@ -33,7 +33,7 @@ class LanguageNodeAdmin(admin.ModelAdmin):
     list_display = ('name', 'nodetype', 'parentnode__name')
     search_fields = ('name',)
     list_filter = ('nodetype',)
-    exclude = ('displayname', 'displaylinks', 'slug')
+    readonly_fields = ('displayname', 'displaylinks', 'slug')
     filter_horizontal = ('refs',)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -65,7 +65,7 @@ class LanguageOtherNameAdmin(admin.ModelAdmin):
 class PropertyNodeAdmin(admin.ModelAdmin):
     list_display = ('name', 'parentnode__name')
     search_fields = ('name',)
-    exclude = ('displayname', 'displaylinks', 'slug')
+    readonly_fields = ('displayname', 'displaylinks', 'slug')
     filter_horizontal = ('refs',)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -87,7 +87,7 @@ class TermAdmin(admin.ModelAdmin):
     list_display = ('linkname', 'language__name')
     search_fields = ('linkname',)
     list_filter = (LanguageStrictFilter,)
-    exclude = ('slug', 'linkname')
+    readonly_fields = ('linkname', 'slug')
     filter_horizontal = ('refs',)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):

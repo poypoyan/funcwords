@@ -6,14 +6,17 @@ declare
         prev_name varchar(255);
         prev_json jsonb;
         prev_slug varchar(50);
+        unaccented varchar(255);
+        -- language names are assumed to be unique, so no count variable
 begin
+    unaccented = unaccent(new.Name);
     if new.NodeType = 1 then
         select Name, Slug into prev_name, prev_slug from Language_Node where id = new.ParentNode;
         new.DisplayName = concat(prev_name, ', ', new.Name);
-        new.Slug = concat(prev_slug, '-', lower(replace(new.Name, ' ', '-')));
+        new.Slug = concat(prev_slug, '-', lower(replace(replace(unaccented, ' ', '-'), '''', '_')));
     else
         new.DisplayName = new.Name;
-        new.Slug = lower(replace(new.Name, ' ', '-'));
+        new.Slug = lower(replace(replace(unaccented, ' ', '-'), '''', '_'));
     end if;
 
     if new.ParentNode is null then
@@ -32,15 +35,18 @@ declare
     prev_name varchar(255);
     prev_json jsonb;
     prev_slug varchar(50);
+    unaccented varchar(255);
+    -- language names are assumed to be unique, so no count variable
 begin
-    if (new.name is distinct from old.name) or (new.NodeType is distinct from old.NodeType) then
+    if (new.name is distinct from old.name) or (new.NodeType is distinct from old.NodeType) or (new.ParentNode is distinct from old.ParentNode) then
+        unaccented = unaccent(new.Name);
         if new.NodeType = 1 then
             select Name, Slug into prev_name, prev_slug from Language_Node where id = new.ParentNode;
             new.DisplayName = concat(prev_name, ', ', new.Name);
-            new.Slug = concat(prev_slug, '-', lower(replace(new.Name, ' ', '-')));
+            new.Slug = concat(prev_slug, '-', lower(replace(replace(unaccented, ' ', '-'), '''', '_')));
         else
             new.DisplayName = new.Name;
-            new.Slug = lower(replace(new.Name, ' ', '-'));
+            new.Slug = lower(replace(replace(unaccented, ' ', '-'), '''', '_'));
         end if;
     end if;
 
@@ -63,13 +69,15 @@ declare
     prev_dispname varchar(255);
     prev_json jsonb;
     prev_slug varchar(50);
+    unaccented varchar(255);
     count int;
 begin
+    unaccented = unaccent(new.Name);
     select count(Id) into count from Property_Node where Name = new.Name;
     if count > 0 then
-        new.Slug = concat(lower(replace(new.Name, ' ', '-')), '-', count + 1);
+        new.Slug = concat(lower(replace(replace(unaccented, ' ', '-'), '''', '_')), '-', count + 1);
     else
-        new.Slug = lower(replace(new.Name, ' ', '-'));
+        new.Slug = lower(replace(replace(unaccented, ' ', '-'), '''', '_'));
     end if;
 
     if new.ParentNode is null then
@@ -91,14 +99,16 @@ declare
     prev_dispname varchar(255);
     prev_json jsonb;
     prev_slug varchar(50);
+    unaccented varchar(255);
     count int;
 begin
     if new.name is distinct from old.name then
+        unaccented = unaccent(new.Name);
         select count(Id) into count from Property_Node where Name = new.Name;
         if count > 0 then
-            new.Slug = concat(lower(replace(new.Name, ' ', '-')), '-', count + 1);
+            new.Slug = concat(lower(replace(replace(unaccented, ' ', '-'), '''', '_')), '-', count + 1);
         else
-            new.Slug = lower(replace(new.Name, ' ', '-'));
+            new.Slug = lower(replace(replace(unaccented, ' ', '-'), '''', '_'));
         end if;
     end if;
 
@@ -125,10 +135,10 @@ begin
     unaccented = unaccent(new.Name);
     select count(Id) into count from Term where Language = New.Language and unaccent(Name) = unaccented;
     if count > 0 then
-        new.Slug = concat(lower(replace(unaccented, ' ', '-')), '-', count + 1);
+        new.Slug = concat(lower(replace(replace(unaccented, ' ', '-'), '''', '_')), '-', count + 1);
         new.LinkName = concat(unaccented, ' (', count + 1, ')');
     else
-        new.Slug = lower(replace(unaccented, ' ', '-'));
+        new.Slug = lower(replace(replace(unaccented, ' ', '-'), '''', '_'));
         new.LinkName = unaccented;
     end if;
 
@@ -145,10 +155,10 @@ begin
         unaccented = unaccent(new.Name);
         select count(Id) into count from Term where Language = New.Language and unaccent(Name) = unaccented;
         if count > 0 then
-            new.Slug = concat(lower(replace(unaccented, ' ', '-')), '-', count + 1);
+            new.Slug = concat(lower(replace(replace(unaccented, ' ', '-'), '''', '_')), '-', count + 1);
             new.LinkName = concat(unaccented, ' (', count + 1, ')');
         else
-            new.Slug = lower(replace(unaccented, ' ', '-'));
+            new.Slug = lower(replace(replace(unaccented, ' ', '-'), '''', '_'));
             new.LinkName = unaccented;
         end if;
     end if;
@@ -191,4 +201,4 @@ for each row execute function populate_term_slug_bu();
 create or replace trigger tp_disp_index before insert on Term_Property
 for each row execute function populate_tp_disp_index();
 
-alter database "Function_Words" set pg_trgm.similarity_threshold = 0.15;
+alter database "Function_Words" set pg_trgm.similarity_threshold = 0.20;
