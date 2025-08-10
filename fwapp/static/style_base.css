@@ -85,3 +85,8 @@ main .long-li li {
     color: #c7a7e5;
   }
 }
+
+.ref-url {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}

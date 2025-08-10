@@ -5,6 +5,8 @@ from django.http import Http404
 from urllib.parse import urlencode
 from . import models
 from .forms import SearchForm
+from .funcbool import conf as funcbool_conf
+from .funcbool.main import bool_proc
 import random
 
 
@@ -102,6 +104,68 @@ def term_detail(request, lang, term):
             'refs': refs_query,
             'title': f'{ term_query.linkname } ({ lang_query['displayname'] })',
             'description': f'Some information about the word { term_query.linkname } from the { lang_query['displayname'] } language/dialect.'
+        }
+    )
+
+
+def term_other(request, lang, term):
+    try:
+        lang_query = models.LanguageNode.objects.values('id', 'displayname', 'slug').get(slug=lang)
+        term_query = models.Term.objects.values('id', 'name', 'linkname', 'slug').get(slug=term, language=lang_query['id'])
+    except (models.LanguageNode.DoesNotExist, models.Term.DoesNotExist):
+        raise Http404
+
+    props_query = models.PropertyNode.objects.values('id', 'displayname', 'slug').filter(termproperty__term=term_query['id']).order_by('termproperty__dispindex')
+    idx_bool = bool_proc(props_query, funcbool_conf.config, funcbool_conf.filt)
+
+    # process funcbool output
+    if len(idx_bool) == 0:
+        terms_query = models.Term.objects.none()
+    else:
+        terms_query = models.Term.objects.values('linkname', 'slug', 'language__displayname', 'language__slug').filter(~Q(id=term_query['id']))
+
+    conds_disp = ''
+    conds_first = True
+    for i in idx_bool:
+        if conds_first:
+            conds_first = False
+        else:
+            conds_disp += ' AND '
+        
+        if len(i) == 1:
+            terms_query = terms_query.filter(termproperty__prop=props_query[i[0]]['id'])
+            conds_disp += f'<a href="/category/{ props_query[i[0]]['slug'] }">{ props_query[i[0]]['displayname'] }</a>'
+        else:
+            or_clause = Q()
+            or_disp = ''
+            or_first = True
+            for j in i:
+                if or_first:
+                    or_first = False
+                    or_disp += '('
+                else:
+                    or_disp += ' OR '
+
+                or_clause |= Q(termproperty__prop=props_query[j]['id'])
+                or_disp += f'<a href="/category/{ props_query[j]['slug'] }">{ props_query[j]['displayname'] }</a>'
+
+            terms_query = terms_query.filter(or_clause)
+            conds_disp += or_disp + ')'
+
+    terms_query = terms_query.order_by('linkname')
+    terms_ct = terms_query.count()
+
+    paginator = Paginator(terms_query, _PAGE_ENTRIES)
+    page_obj = paginator.get_page(request.GET.get("page"))
+    return render(request, 'term_other.html',
+        {
+            'lang': lang_query,
+            'term': term_query,
+            'conds_disp': conds_disp,
+            'terms_new': page_obj,
+            'terms_new_ct': terms_ct,
+            'title': f'Other terms like { term_query['linkname'] } ({ lang_query['displayname'] })',
+            'description': f'Current list of terms similar to the word { term_query['linkname'] } from the { lang_query['displayname'] } language/dialect.'
         }
     )
 

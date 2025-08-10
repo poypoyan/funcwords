@@ -14,9 +14,9 @@ def autolink(text: str) -> str:
         last_char = i.group(0)[-1]
         if last_char in punc:
             removed_last_char = i.group(0)[:-1]
-            save_str += f'{ text[save_idx: i.start()] }<a href="{ removed_last_char }">{ removed_last_char }</a>{ last_char }'
+            save_str += f'{ text[save_idx: i.start()] }<a class="ref-url" href="{ removed_last_char }">{ removed_last_char }</a>{ last_char }'
         else:
-            save_str += f'{ text[save_idx: i.start()] }<a href="{ i.group(0) }">{ i.group(0) }</a>'
+            save_str += f'{ text[save_idx: i.start()] }<a class="ref-url" href="{ i.group(0) }">{ i.group(0) }</a>'
         save_idx = i.end()
     save_str += text[save_idx: len(text)]
     return save_str

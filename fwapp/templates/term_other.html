@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load referencing %}
+{% block content %}
+<a href="/{{ lang.slug }}/{{ term.slug }}" class="lang-back">&lt;&lt; {{ term.linkname }}</a>
+<br/><br/>
+<h1>Other Terms like <i>{{ term.name }}</i> in {{ lang.displayname }}</h1>
+
+{% if conds_disp %}
+  <br/>
+  <b>Category conditions:</b>&nbsp;{{ conds_disp|safe }}
+  <br/>
+{% endif %}
+
+{% if terms_new %}
+  <br/>
+  <b>Term Entries ({{ terms_new_ct }}):</b>
+  {% with page_obj=terms_new %}
+    {% include 'pagination.html' %}
+  {% endwith %}
+  <ul>
+    {% for term in terms_new %}
+      <li>
+        <a href="/{{ term.language__slug }}/{{ term.slug }}">{{ term.linkname }}</a> -
+        <a href="/{{ term.language__slug }}/">{{ term.language__displayname }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+{% endblock %}

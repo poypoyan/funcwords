@@ -12,4 +12,5 @@ urlpatterns = [
     path('category/<slug:cat>', views.cat_detail),
     path('<slug:lang>/', views.lang_detail),
     path('<slug:lang>/<slug:term>', views.term_detail),
+    path('<slug:lang>/<slug:term>/other', views.term_other)
 ]
