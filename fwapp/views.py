@@ -252,18 +252,18 @@ def search(request):
         results = models.Term.objects.values('linkname', 'slug', 'language__displayname', 'language__slug').filter(
                 Q(linkname__trigram_similar=searched) | Q(linkname__icontains=searched)
             ).annotate(similarity=TrigramSimilarity('linkname', searched)
-            ).order_by('-similarity')
+            ).order_by('-similarity', 'linkname')
     elif form.cleaned_data['t'] == 'language':
         results = models.LanguageNode.objects.values('displayname', 'slug').filter(
                 Q(displayname__unaccent__trigram_similar=searched) | Q(displayname__unaccent__icontains=searched) |
                 Q(languageothername__name__unaccent__trigram_similar=searched) | Q(languageothername__name__unaccent__icontains=searched)
             ).annotate(similarity=Greatest(TrigramSimilarity('displayname__unaccent', searched), TrigramSimilarity('languageothername__name__unaccent', searched))
-            ).order_by('-similarity')
+            ).order_by('-similarity', 'displayname')
     elif form.cleaned_data['t'] == 'category':
         results = models.PropertyNode.objects.values('displayname', 'slug').filter(
                 Q(displayname__unaccent__trigram_similar=searched) | Q(displayname__unaccent__icontains=searched)
             ).annotate(similarity=TrigramSimilarity('displayname__unaccent', searched)
-            ).order_by('-similarity')
+            ).order_by('-similarity', 'displayname')
 
     results_ct = results.count()
 
