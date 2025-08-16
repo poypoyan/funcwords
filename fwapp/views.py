@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
+from django.contrib.postgres.search import TrigramSimilarity
 from django.db.models import Q
+from django.db.models.functions import Greatest
 from django.http import Http404
 from urllib.parse import urlencode
 from . import models
@@ -247,20 +249,21 @@ def search(request):
     searched = form.cleaned_data['q']
     if form.cleaned_data['t'] == 'term':
         # linkname is already unaccented
-        results = models.Term.objects.values('linkname', 'slug', 'language__displayname', 'language__slug') \
-            .filter(Q(linkname__trigram_similar=searched) | Q(linkname__icontains=searched)).order_by('linkname')
+        results = models.Term.objects.values('linkname', 'slug', 'language__displayname', 'language__slug').filter(
+                Q(linkname__trigram_similar=searched) | Q(linkname__icontains=searched)
+            ).annotate(similarity=TrigramSimilarity('linkname', searched)
+            ).order_by('-similarity')
     elif form.cleaned_data['t'] == 'language':
-        results0 = models.LanguageNode.objects.values('displayname', 'slug') \
-            .filter(Q(displayname__unaccent__trigram_similar=searched) | Q(displayname__unaccent__icontains=searched))
-
-        results1 = models.LanguageOtherName.objects.values('language__id') \
-            .filter(Q(name__unaccent__trigram_similar=searched) | Q(name__unaccent__icontains=searched))
-        results1_lang = models.LanguageNode.objects.values('displayname', 'slug').filter(id__in=results1)
-
-        results = results0.union(results1_lang).order_by('displayname')
+        results = models.LanguageNode.objects.values('displayname', 'slug').filter(
+                Q(displayname__unaccent__trigram_similar=searched) | Q(displayname__unaccent__icontains=searched) |
+                Q(languageothername__name__unaccent__trigram_similar=searched) | Q(languageothername__name__unaccent__icontains=searched)
+            ).annotate(similarity=Greatest(TrigramSimilarity('displayname__unaccent', searched), TrigramSimilarity('languageothername__name__unaccent', searched))
+            ).order_by('-similarity')
     elif form.cleaned_data['t'] == 'category':
-        results = models.PropertyNode.objects.values('displayname', 'slug') \
-            .filter(Q(displayname__unaccent__trigram_similar=searched) | Q(displayname__unaccent__icontains=searched)).order_by('displayname')
+        results = models.PropertyNode.objects.values('displayname', 'slug').filter(
+                Q(displayname__unaccent__trigram_similar=searched) | Q(displayname__unaccent__icontains=searched)
+            ).annotate(similarity=TrigramSimilarity('displayname__unaccent', searched)
+            ).order_by('-similarity')
 
     results_ct = results.count()
 
