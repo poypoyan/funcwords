@@ -17,8 +17,7 @@
   <br/>
   <b>Other names:</b>&nbsp;
   {% for oname in lang_on %}
-    {{ oname.name }}
-    {% if not forloop.last %},{% endif %}
+    {{ oname.name }}{% if not forloop.last %},{% endif %}
   {% endfor %}
   <br/>
 {% endif %}

@@ -12,8 +12,7 @@
     <a href="/category/{{ k }}">{{ v }}</a>
     &gt;
   {% endfor %}
-  <a href="/category/{{ prop.slug }}">{{ prop.name }}</a>
-  {% if not forloop.last %},{% endif %}
+  <a href="/category/{{ prop.slug }}">{{ prop.name }}</a>{% if not forloop.last %},{% endif %}
 {% endfor %}
 <br/>
 
