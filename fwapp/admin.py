@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.forms import ModelChoiceField
+from django.utils.html import format_html
 from django.db.models import Q
 from .models import LanguageNode, LanguageOtherName, PropertyNode, Term, TermProperty, Reference
 
@@ -33,7 +34,7 @@ class LanguageNodeAdmin(admin.ModelAdmin):
     list_display = ('name', 'nodetype', 'parentnode__name')
     search_fields = ('name',)
     list_filter = ('nodetype',)
-    readonly_fields = ('displayname', 'displaylinks', 'slug')
+    readonly_fields = ('displayname', 'displaylinks', 'slug', 'actual_page')
     filter_horizontal = ('refs',)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -48,6 +49,13 @@ class LanguageNodeAdmin(admin.ModelAdmin):
         form = super().get_form(request, obj, **kwargs)
         form.base_fields['parentnode'].required = False
         return form
+
+    @admin.display(description='Actual Page')
+    def actual_page(self, obj):
+        if obj.id != None:
+            return format_html('<a href="/{0}">/{0}</a>', obj.slug)
+        else:
+            return '-'
 
 
 @admin.register(LanguageOtherName)
@@ -65,7 +73,7 @@ class LanguageOtherNameAdmin(admin.ModelAdmin):
 class PropertyNodeAdmin(admin.ModelAdmin):
     list_display = ('name', 'parentnode__name')
     search_fields = ('name',)
-    readonly_fields = ('displayname', 'displaylinks', 'slug')
+    readonly_fields = ('displayname', 'displaylinks', 'slug', 'actual_page')
     filter_horizontal = ('refs',)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -81,19 +89,33 @@ class PropertyNodeAdmin(admin.ModelAdmin):
         form.base_fields['parentnode'].required = False
         return form
 
+    @admin.display(description='Actual Page')
+    def actual_page(self, obj):
+        if obj.id != None:
+            return format_html('<a href="/category/{0}">/category/{0}</a>', obj.slug)
+        else:
+            return '-'
+
 
 @admin.register(Term)
 class TermAdmin(admin.ModelAdmin):
     list_display = ('linkname', 'language__name')
     search_fields = ('linkname',)
     list_filter = (LanguageStrictFilter,)
-    readonly_fields = ('linkname', 'slug')
+    readonly_fields = ('linkname', 'slug', 'actual_page')
     filter_horizontal = ('refs',)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'language':
             return ForeignKeyDropDownDisp(queryset=LanguageNode.objects.exclude(nodetype=2).order_by('name'))
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    @admin.display(description='Actual Page')
+    def actual_page(self, obj):
+        if obj.id != None:
+            return format_html('<a href="/{0}/{1}">/{0}/{1}</a>', obj.language.slug, obj.slug)
+        else:
+            return '-'
 
 
 @admin.register(TermProperty)
