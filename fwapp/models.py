@@ -87,3 +87,11 @@ class TermProperty(models.Model):
         db_table_comment = "Associates a Property to a Term."
         unique_together = (('term', 'prop'),)
         verbose_name_plural = "Term properties"
+
+
+class MainsContent(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    content = models.TextField(blank=True, db_default='')
+
+    class Meta:
+        db_table = 'mains_content'

@@ -2,23 +2,5 @@
 {% block content %}
 <h1>Function Words in Philippine Languages</h1>
 <br/>
-<p>Function words are words that provide grammatical structure to a sentence, rather than being representations of objects or phenomena.
-These are pronouns, case markers, affixes, conjunctions, particles, etc. This project aims to collect these words from over a hundred languages in the Philippines, to better see the similarities and differences among the languages.</p>
-<br/>
-<p>This is a simple side project for learning <a href="https://www.djangoproject.com/">Django</a> and Web development in general.</p>
-<br/>
-<h3>Conventions for Orthography of Terms</h3>
-<br/>
-<ul class="long-li">
-  <li>
-    In many Philippine languages, stress on syllable can change the meaning of a word. The heading text in a term page will have diacritics if we have data on the pronunciation, following <i>Filipino Orthography</i>. The diacritics are usually not written in everyday text, but will serve here as pronunciation guide.
-    The acute marker (´) on a vowel indicates stress, which means it is uttered longer or "more fully". The grave marker (`) on a vowel indicates a glottal stop after. For example, "uh oh" can be written in the described style as "ò ow". The circumflex marker (ˆ) is the combination of the previous two. All these markers can be anywhere in a word.
-    The dash in the middle of a word indicates either a glottal stop between a consonant and then a vowel, or two (or more) words compounded into one. The apostrophe (') in the beginning or middle of the word indicates a contraction, same with English (e.g., isn't, you're, etc.). The character ë will represent schwa, which is found in some Philippine languages.
-    Lastly, consecutive vowels will always have a glottal stop between those, hence "òo" can be simplified to just "oo".
-  </li>
-  <li>
-    In some languages, there could be consonants not in the English alphabet (e.g., ñ), diacritics beyond the ones defined above, or we'll not follow a rule mentioned above (e.g., consecutive different vowels will have glide between those, instead). For these cases the orthography rules will be specified in the language page.
-    We make no claim that these are parts of the "official" orthography of the language.
-  </li>
-</ul>
+{{ content|safe }}
 {% endblock %}

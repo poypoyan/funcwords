@@ -2,7 +2,7 @@
 {% block content %}
 <h1>Languages</h1>
 <br/>
-<p>Language classification generally follows <a href="https://glottolog.org">Glottolog</a>, except for some changes and additions; an instance would be the addition of the <a href="/philippine/">Philippine</a> grouping.</a></p>
+{{ content|safe }}
 <br/>
 <b>Entries ({{ langs_ct }}):</b>
 {% with page_obj=langs %}

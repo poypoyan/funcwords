@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.forms import ModelChoiceField
 from django.utils.html import format_html
 from django.db.models import Q
-from .models import LanguageNode, LanguageOtherName, PropertyNode, Term, TermProperty, Reference
+from .models import LanguageNode, LanguageOtherName, PropertyNode, Term, TermProperty, Reference, MainsContent
+from .urls_app import URL_STR
 
 
 class ForeignKeyDropDownDisp(ModelChoiceField):
@@ -91,10 +92,10 @@ class PropertyNodeAdmin(admin.ModelAdmin):
 
     @admin.display(description='Actual Page')
     def actual_page(self, obj):
-        if obj.id != None:
-            return format_html('<a href="/category/{0}">/category/{0}</a>', obj.slug)
-        else:
+        if obj.id == None:
             return '-'
+        else:
+            return format_html('<a href="/{1}/{0}">/{1}/{0}</a>', obj.slug, URL_STR['cat'])
 
 
 @admin.register(Term)
@@ -112,10 +113,10 @@ class TermAdmin(admin.ModelAdmin):
 
     @admin.display(description='Actual Page')
     def actual_page(self, obj):
-        if obj.id != None:
-            return format_html('<a href="/{0}/{1}">/{0}/{1}</a>', obj.language.slug, obj.slug)
-        else:
+        if obj.id == None:
             return '-'
+        else:
+            return format_html('<a href="/{0}/{1}">/{0}/{1}</a>', obj.language.slug, obj.slug)
 
 
 @admin.register(TermProperty)
@@ -139,3 +140,18 @@ class TermPropertyAdmin(admin.ModelAdmin):
 class ReferenceAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
+
+
+@admin.register(MainsContent)
+class MainsContent(admin.ModelAdmin):
+    list_display = ('name',)
+    readonly_fields = ('actual_page',)
+
+    @admin.display(description='Actual Page')
+    def actual_page(self, obj):
+        if obj.id == None:
+            return '-'
+        elif obj.name == 'home':
+            return format_html('<a href="/">/</a>')
+        else:
+            return format_html('<a href="/{0}">/{0}</a>', URL_STR[obj.name])

@@ -34,8 +34,14 @@ def error_500(request):
 
 
 def home(request):
+    try:
+        content = models.MainsContent.objects.get(name='home').content
+    except models.MainsContent.DoesNotExist:
+        content = ''
+
     return render(request, 'home.html',
         {
+            'content': content,
             'description': 'Start here to explore function words in various Philippine languages.'
         }
     )
@@ -45,10 +51,16 @@ def langs(request):
     langs_query = models.LanguageNode.objects.values('displayname', 'slug').filter(Q(nodetype=0) | Q(nodetype=1)).order_by('displayname')
     langs_ct = langs_query.count()
 
+    try:
+        content = models.MainsContent.objects.get(name='langs').content
+    except models.MainsContent.DoesNotExist:
+        content = ''
+
     paginator = Paginator(langs_query, _PAGE_ENTRIES)
     page_obj = paginator.get_page(request.GET.get("page"))
     return render(request, 'langs.html',
         {
+            'content': content,
             'langs': page_obj,
             'langs_ct': langs_ct,
             'per_page': _PAGE_ENTRIES,
@@ -176,10 +188,16 @@ def cats(request):
     cats_query = models.PropertyNode.objects.values('displayname', 'slug').order_by('displayname')
     cats_ct = cats_query.count()
 
+    try:
+        content = models.MainsContent.objects.get(name='cats').content
+    except models.MainsContent.DoesNotExist:
+        content = ''
+
     paginator = Paginator(cats_query, _PAGE_ENTRIES)
     page_obj = paginator.get_page(request.GET.get("page"))
     return render(request, 'cats.html',
         {
+            'content': content,
             'cats': page_obj,
             'cats_ct': cats_ct,
             'per_page': _PAGE_ENTRIES,
