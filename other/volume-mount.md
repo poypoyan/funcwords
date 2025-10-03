@@ -19,3 +19,17 @@ Then import models like this:
 ```python
 from fwapp.models import Term
 ```
+
+## Data Dump and Migration
+1. In a source repository (e.g., `ssh` to production in VPS), run this command to dump all data:
+```bash
+docker exec -i <src repo dir name>-web-1 python manage.py dumpdata fwapp > <some dir path>/db.json
+```
+2. Exit the VPS. Go (`cd`) to a local directory and run `rsync` to copy the dump to local:
+```bash
+rsync -avz root@<VPS IP address>:<some dir path>/db.json .
+```
+3. Now `db.json` is in the local directory. Copy it to the mount directory inside a destination repository. Finally, `cd` to the repository and run this command to upload the dump:
+```bash
+docker exec -i <dest repo dir name>-web-1 python manage.py loaddata mount/db.json
+```

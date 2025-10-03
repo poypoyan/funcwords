@@ -20,5 +20,8 @@ python manage.py changepassword <user_name>
 Testing:
 python manage.py test
 
+Clear Database (Not delete tables):
+python manage.py flush
+
 View actual SQL query in views.py:
 print(sample_query.query)
