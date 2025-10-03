@@ -200,5 +200,3 @@ for each row execute function populate_term_slug_bu();
 
 create or replace trigger tp_disp_index before insert on Term_Property
 for each row execute function populate_tp_disp_index();
-
-alter database "Function_Words" set pg_trgm.similarity_threshold = 0.20;

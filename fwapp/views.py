@@ -13,6 +13,7 @@ import random
 
 
 _PAGE_ENTRIES = 30
+_TRIGRAM_BOUND = 0.2
 
 
 def error_404(request, exception):
@@ -267,20 +268,23 @@ def search(request):
     searched = form.cleaned_data['q']
     if form.cleaned_data['t'] == 'term':
         # linkname is already unaccented
-        results = models.Term.objects.values('linkname', 'slug', 'language__displayname', 'language__slug').filter(
-                Q(linkname__trigram_similar=searched) | Q(linkname__icontains=searched)
+        results = models.Term.objects.values('linkname', 'slug', 'language__displayname', 'language__slug').annotate(
+                similarity=TrigramSimilarity('linkname', searched)
+            ).filter(
+                Q(similarity__gt=_TRIGRAM_BOUND) | Q(linkname__icontains=searched)
             ).annotate(similarity=TrigramSimilarity('linkname', searched)
             ).order_by('-similarity', 'linkname')
     elif form.cleaned_data['t'] == 'language':
-        results = models.LanguageNode.objects.values('displayname', 'slug').filter(
-                Q(displayname__unaccent__trigram_similar=searched) | Q(displayname__unaccent__icontains=searched) |
-                Q(languageothername__name__unaccent__trigram_similar=searched) | Q(languageothername__name__unaccent__icontains=searched)
-            ).annotate(similarity=Greatest(TrigramSimilarity('displayname__unaccent', searched), TrigramSimilarity('languageothername__name__unaccent', searched))
-            ).order_by('-similarity', 'displayname')
+        results = models.LanguageNode.objects.values('displayname', 'slug').annotate(
+                similarity=Greatest(TrigramSimilarity('displayname__unaccent', searched), TrigramSimilarity('languageothername__name__unaccent', searched))
+            ).filter(
+                Q(similarity__gt=_TRIGRAM_BOUND) | Q(displayname__unaccent__icontains=searched) | Q(languageothername__name__unaccent__icontains=searched)
+            ).order_by('-similarity', 'displayname').distinct()
     elif form.cleaned_data['t'] == 'category':
-        results = models.PropertyNode.objects.values('displayname', 'slug').filter(
-                Q(displayname__unaccent__trigram_similar=searched) | Q(displayname__unaccent__icontains=searched)
-            ).annotate(similarity=TrigramSimilarity('displayname__unaccent', searched)
+        results = models.PropertyNode.objects.values('displayname', 'slug').annotate(
+                similarity=TrigramSimilarity('displayname__unaccent', searched)
+            ).filter(
+                Q(similarity__gt=_TRIGRAM_BOUND) | Q(displayname__unaccent__icontains=searched)
             ).order_by('-similarity', 'displayname')
 
     results_ct = results.count()

@@ -2,6 +2,8 @@ __pycache__/
 *.py[cod]
 fwvenv/
 static/
+mount/
+!mount/sample.py
 # .env
 
 node_modules/
