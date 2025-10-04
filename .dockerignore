@@ -1,10 +1,8 @@
-.git/
-.gitignore
-.dockerignore
-.env
+.*
+*.md
 Dockerfile
 Makefile
-README.md
+LICENSE
 docker-compose.yml
 
 **/__pycache__/
