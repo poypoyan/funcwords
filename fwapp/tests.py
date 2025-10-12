@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.template import Context, Template
-from .funcbool.main import bool_proc
+from .funcbool import bool_proc
 
 class ReferencingTest(TestCase):
     def test_autolink(self):
@@ -30,6 +30,9 @@ class ReferencingTest(TestCase):
 class FuncboolTest(TestCase):
     def filt(self, x, y: set) -> bool:
         return x in y
+
+    def test_empty_conf(self):
+        self.assertEqual(bool_proc([1, 2, 3], {}, self.filt), [[0], [1], [2]])
 
     def test0(self):
         config = {'or': [{3,4}, {3,5}], 'rem': set()}

@@ -90,6 +90,13 @@ class TermProperty(models.Model):
 
 
 class MainsContent(models.Model):
+    # Must contain the following names:
+    # * sitename - Website name. Used in title, metadata, and header of home page
+    # * home - Content of home page
+    # * langs - Content of languages page
+    # * cats - Content of categories page
+    # * fbconf - JSON config for funcbools
+
     name = models.CharField(max_length=50, unique=True)
     content = models.TextField(blank=True, db_default='')
 

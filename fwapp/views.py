@@ -7,44 +7,53 @@ from django.http import Http404
 from urllib.parse import urlencode
 from . import models
 from .forms import SearchForm
-from .funcbool import conf as funcbool_conf
-from .funcbool.main import bool_proc
-import random
+from .funcbool import bool_proc, fb_filt
+import random, json
 
 
 _PAGE_ENTRIES = 30
 _TRIGRAM_BOUND = 0.2
+_CONTENTS = [None]
+_FB_CONF = [None]
+
+
+def get_mains_content(key: str) -> str:
+    # since mains contents are loaded once, restart server to see to changes
+    if _CONTENTS[0] == None or _FB_CONF[0] == None:
+        _CONTENTS[0] = {i.name: i for i in models.MainsContent.objects.all()}
+        _FB_CONF[0] = json.loads(_CONTENTS[0]['fbconf'].content) if 'fbconf' in _CONTENTS[0] else {}
+
+    return _CONTENTS[0][key].content if key in _CONTENTS[0] else ''
+
+
+def finalize_context(main: dict) -> dict:
+    return main | { 'sitename': get_mains_content('sitename') }
 
 
 def error_404(request, exception):
     return render(request, 'error_404.html',
-        {
+        finalize_context({
             'is_nofollow': True,
             'title': 'Error 404'
-        },
+        }),
     status=404)
 
 
 def error_500(request):
     return render(request, 'error_500.html',
-        {
+        finalize_context({
             'is_nofollow': True,
             'title': 'Error 500'
-        },
+        }),
     status=500)
 
 
 def home(request):
-    try:
-        content = models.MainsContent.objects.get(name='home').content
-    except models.MainsContent.DoesNotExist:
-        content = ''
-
     return render(request, 'home.html',
-        {
-            'content': content,
-            'description': 'Start here to explore function words in various Philippine languages.'
-        }
+        finalize_context({
+            'content': get_mains_content('home'),
+            'description': 'Introduction and general information.'
+        })
     )
 
 
@@ -52,22 +61,17 @@ def langs(request):
     langs_query = models.LanguageNode.objects.values('displayname', 'slug').filter(Q(nodetype=0) | Q(nodetype=1)).order_by('displayname')
     langs_ct = langs_query.count()
 
-    try:
-        content = models.MainsContent.objects.get(name='langs').content
-    except models.MainsContent.DoesNotExist:
-        content = ''
-
     paginator = Paginator(langs_query, _PAGE_ENTRIES)
     page_obj = paginator.get_page(request.GET.get("page"))
     return render(request, 'langs.html',
-        {
-            'content': content,
+        finalize_context({
+            'content': get_mains_content('langs'),
             'langs': page_obj,
             'langs_ct': langs_ct,
             'per_page': _PAGE_ENTRIES,
             'title': 'Languages',
             'description': 'Current list of languages.'
-        }
+        })
     )
 
 
@@ -87,7 +91,7 @@ def lang_detail(request, lang):
     paginator = Paginator(terms_query, _PAGE_ENTRIES)
     page_obj = paginator.get_page(request.GET.get("page"))
     return render(request, 'lang_detail.html',
-        {
+        finalize_context({
             'lang': lang_query,
             'lang_children': lang_children_query,
             'langs_ct': langs_ct,
@@ -98,7 +102,7 @@ def lang_detail(request, lang):
             'per_page': _PAGE_ENTRIES,
             'title': f'{ lang_query.displayname }',
             'description': f'Some information about { lang_query.displayname } language/dialect/language group.'
-        }
+        })
     )
 
 
@@ -112,14 +116,14 @@ def term_detail(request, lang, term):
     props_query = models.PropertyNode.objects.values('name', 'displaylinks', 'slug').filter(termproperty__term=term_query.id).order_by('termproperty__dispindex')
     refs_query = models.Reference.objects.values().filter(term=term_query.id).order_by('info')
     return render(request, 'term_detail.html',
-        {
+        finalize_context({
             'lang': lang_query,
             'term': term_query,
             'props': props_query,
             'refs': refs_query,
             'title': f'{ term_query.linkname } ({ lang_query['displayname'] })',
             'description': f'Some information about the word { term_query.linkname } from the { lang_query['displayname'] } language/dialect.'
-        }
+        })
     )
 
 
@@ -131,7 +135,8 @@ def term_other(request, lang, term):
         raise Http404
 
     props_query = models.PropertyNode.objects.values('id', 'displayname', 'slug').filter(termproperty__term=term_query['id']).order_by('termproperty__dispindex')
-    idx_bool = bool_proc(props_query, funcbool_conf.config, funcbool_conf.filt)
+    get_mains_content('')   # just for storing _FB_CONF
+    idx_bool = bool_proc(props_query, _FB_CONF[0], fb_filt)
 
     # process funcbool output
     if len(idx_bool) == 0:
@@ -173,7 +178,7 @@ def term_other(request, lang, term):
     paginator = Paginator(terms_query, _PAGE_ENTRIES)
     page_obj = paginator.get_page(request.GET.get("page"))
     return render(request, 'term_other.html',
-        {
+        finalize_context({
             'lang': lang_query,
             'term': term_query,
             'conds_disp': conds_disp,
@@ -181,7 +186,7 @@ def term_other(request, lang, term):
             'terms_new_ct': terms_ct,
             'title': f'Other terms like { term_query['linkname'] } ({ lang_query['displayname'] })',
             'description': f'Current list of terms similar to the word { term_query['linkname'] } from the { lang_query['displayname'] } language/dialect.'
-        }
+        })
     )
 
 
@@ -189,22 +194,17 @@ def cats(request):
     cats_query = models.PropertyNode.objects.values('displayname', 'slug').order_by('displayname')
     cats_ct = cats_query.count()
 
-    try:
-        content = models.MainsContent.objects.get(name='cats').content
-    except models.MainsContent.DoesNotExist:
-        content = ''
-
     paginator = Paginator(cats_query, _PAGE_ENTRIES)
     page_obj = paginator.get_page(request.GET.get("page"))
     return render(request, 'cats.html',
-        {
-            'content': content,
+        finalize_context({
+            'content': get_mains_content('cats'),
             'cats': page_obj,
             'cats_ct': cats_ct,
             'per_page': _PAGE_ENTRIES,
             'title': 'Categories',
             'description': 'Current list of categories for function words.'
-        }
+        })
     )
 
 
@@ -223,7 +223,7 @@ def cat_detail(request, cat):
     paginator = Paginator(terms_query, _PAGE_ENTRIES)
     page_obj = paginator.get_page(request.GET.get("page"))
     return render(request, 'cat_detail.html',
-        {
+        finalize_context({
             'cat': cat_query,
             'cat_children': cat_children_query,
             'cats_ct': cats_ct,
@@ -233,7 +233,7 @@ def cat_detail(request, cat):
             'per_page': _PAGE_ENTRIES,
             'title': f'{ cat_query.displayname }',
             'description': f'Some information about { cat_query.displayname }.'
-        }
+        })
     )
 
 
@@ -250,14 +250,14 @@ def random_term(_):
 def search(request):
     if len(request.GET) == 0:
         return render(request, 'search.html',
-            {
+            finalize_context({
                 'form': SearchForm(),
                 'type_select': None,
                 'results': None,
                 'is_search': True,
                 'title': 'Search',
                 'description': 'Search for a term, language, or category.'
-            }
+            })
         )
 
     form = SearchForm(request.GET)
@@ -292,7 +292,7 @@ def search(request):
     paginator = Paginator(results, _PAGE_ENTRIES)
     page_obj = paginator.get_page(request.GET.get("page"))
     return render(request, 'search.html',
-        {
+        finalize_context({
             'form': form,
             'type_select': form.cleaned_data['t'],
             'results': page_obj,
@@ -302,5 +302,5 @@ def search(request):
             'is_search': True,
             'is_nofollow': True,
             'title': f'Search results for \'{ searched }\'',
-        }
+        })
     )

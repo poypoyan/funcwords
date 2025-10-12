@@ -1,5 +1,4 @@
--- Function Words in Philippine Languages
--- Triggers
+-- Triggers. Run this after initial run of database
 
 create or replace function populate_lang_disps_bi() returns trigger as $$
 declare
