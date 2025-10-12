@@ -149,9 +149,9 @@ class MainsContent(admin.ModelAdmin):
 
     @admin.display(description='Actual Page')
     def actual_page(self, obj):
-        if obj.id == None:
-            return '-'
-        elif obj.name == 'home':
+        if obj.name == 'home':
             return format_html('<a href="/">/</a>')
-        else:
+        elif obj.name in ['langs', 'cats']:
             return format_html('<a href="/{0}">/{0}</a>', URL_STR[obj.name])
+        else:
+            return '-'

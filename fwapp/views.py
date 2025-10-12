@@ -18,7 +18,7 @@ _FB_CONF = [None]
 
 
 def get_mains_content(key: str) -> str:
-    # since mains contents are loaded once, restart server to see to changes
+    # since mains contents are loaded once, restart server to see the changes
     if _CONTENTS[0] == None or _FB_CONF[0] == None:
         _CONTENTS[0] = {i.name: i for i in models.MainsContent.objects.all()}
         _FB_CONF[0] = json.loads(_CONTENTS[0]['fbconf'].content) if 'fbconf' in _CONTENTS[0] else {}
