@@ -275,11 +275,11 @@ def search(request):
             ).annotate(similarity=TrigramSimilarity('linkname', searched)
             ).order_by('-similarity', 'linkname')
     elif form.cleaned_data['t'] == 'language':
-        results = models.LanguageNode.objects.values('displayname', 'slug').annotate(
+        results = models.LanguageNode.objects.values('displayname', 'slug').alias(
                 similarity=Greatest(TrigramSimilarity('displayname__unaccent', searched), TrigramSimilarity('languageothername__name__unaccent', searched))
             ).filter(
                 Q(similarity__gt=_TRIGRAM_BOUND) | Q(displayname__unaccent__icontains=searched) | Q(languageothername__name__unaccent__icontains=searched)
-            ).order_by('-similarity', 'displayname').distinct()
+            ).order_by('displayname').distinct()
     elif form.cleaned_data['t'] == 'category':
         results = models.PropertyNode.objects.values('displayname', 'slug').annotate(
                 similarity=TrigramSimilarity('displayname__unaccent', searched)
