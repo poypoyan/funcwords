@@ -35,14 +35,27 @@ rsync -avz . root@<VPS IP address>:~/the-app --exclude .git/
 ```
 This assumes that the current directory of terminal is this repo. Note that `the-app` directory will be created in the home directory (~) of the user (root in the case of the command above) in VPS, and the files will be copied to that directory.
 
-5. SSH to your VPS: `ssh root@<VPS IP address>`. After login, you'll be in home directory. Go to `the-app` directory and do the Docker setup above. Website should now be up! But it's in HTTP.
+5. (**Update:** I now prefer [decoupling Nginx](other/decouple-nginx.md).) SSH to your VPS: `ssh root@<VPS IP address>`. After login, you'll be in home directory. Go to `the-app` directory and do the Docker setup above. Website should now be up! But it's in HTTP.
 6. HTTP Secure (HTTPS) configuration in `docker-compose.yml`, `settings.py`, and `nginx.conf` are commented. Follow [this](https://certbot.eff.org/instructions?ws=nginx&os=snap) to create SSL certificate except do
 ```bash
 sudo certbot certonly --webroot -w /var/www/certbot/ -d example.com
 ```
 for getting the certificate. Through webroot, certbot can automatically renew without needing to stop containers.
 
-**Update:** I now prefer [this setup](other/decouple-nginx.md), with changes before and during Step 5.
+## Data Dump
+
+This is a ZIP file of the Django JSON data dump, occassionally updated. [Download here (Mega folder).](https://mega.nz/folder/SVtwRLYb#WH5-c-Qh1_1OUlUkSZ0fGQ)
+
+Shield: [![CC BY 4.0][cc-by-shield]][cc-by]
+
+This work is licensed under a
+[Creative Commons Attribution 4.0 International License][cc-by].
+
+[![CC BY 4.0][cc-by-image]][cc-by]
+
+[cc-by]: http://creativecommons.org/licenses/by/4.0/
+[cc-by-image]: https://i.creativecommons.org/l/by/4.0/88x31.png
+[cc-by-shield]: https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg
 
 ## Extra Stuff
 * We provide a Makefile for common commands for development.

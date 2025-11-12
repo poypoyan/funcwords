@@ -11,6 +11,9 @@ Migrate Models:
 python manage.py makemigrations
 python manage.py migrate
 
+Update Static Files:
+python manage.py collectstatic
+
 Create Superuser (Admin):
 python manage.py createsuperuser
 
@@ -22,6 +25,12 @@ python manage.py test
 
 Clear Database (Not delete tables):
 python manage.py flush
+
+Data Dump (Outputs a JSON file):
+python manage.py dumpdata fwapp > dump.json
+
+Data Mount (Put dump into the mount directory.):
+python manage.py loaddata mount/dump.json
 
 View actual SQL query in views.py:
 print(sample_query.query)
