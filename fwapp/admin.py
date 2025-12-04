@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.forms import ModelChoiceField
-from django.utils.html import format_html
+from django.utils.html import mark_safe, format_html
 from django.db.models import Q
 from .models import LanguageNode, LanguageOtherName, PropertyNode, Term, TermProperty, Reference, MainsContent
 from .urls_app import URL_STR
@@ -150,7 +150,7 @@ class MainsContent(admin.ModelAdmin):
     @admin.display(description='Actual Page')
     def actual_page(self, obj):
         if obj.name == 'home':
-            return format_html('<a href="/">/</a>')
+            return mark_safe('<a href="/">/</a>')
         elif obj.name in ['langs', 'cats']:
             return format_html('<a href="/{0}">/{0}</a>', URL_STR[obj.name])
         else:
