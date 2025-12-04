@@ -13,17 +13,25 @@ import random, json
 
 _PAGE_ENTRIES = 30
 _TRIGRAM_BOUND = 0.2
-_CONTENTS = [None]
 _FB_CONF = [None]
 
 
 def get_mains_content(key: str) -> str:
-    # since mains contents are loaded once, restart server to see the changes
-    if _CONTENTS[0] == None or _FB_CONF[0] == None:
-        _CONTENTS[0] = {i.name: i for i in models.MainsContent.objects.all()}
-        _FB_CONF[0] = json.loads(_CONTENTS[0]['fbconf'].content) if 'fbconf' in _CONTENTS[0] else {}
+    try:
+        main = models.MainsContent.objects.values('content').get(name=key)
+    except models.MainsContent.DoesNotExist:
+        return ''
+    return main['content']
 
-    return _CONTENTS[0][key].content if key in _CONTENTS[0] else ''
+
+def get_fb_conf() -> None:
+    # since _FB_CONF is loaded once, restart server to see the changes
+    if _FB_CONF[0] == None:
+        try:
+            conf = models.MainsContent.objects.values('content').get(name='fbconf')
+        except models.MainsContent.DoesNotExist:
+            _FB_CONF[0] = {}
+        _FB_CONF[0] = json.loads(conf['content'])
 
 
 def finalize_context(main: dict) -> dict:
@@ -135,7 +143,7 @@ def term_other(request, lang, term):
         raise Http404
 
     props_query = models.PropertyNode.objects.values('id', 'displayname', 'slug').filter(termproperty__term=term_query['id']).order_by('termproperty__dispindex')
-    get_mains_content('')   # just for storing _FB_CONF
+    get_fb_conf()
     idx_bool = bool_proc(props_query, _FB_CONF[0], fb_filt)
 
     # process funcbool output

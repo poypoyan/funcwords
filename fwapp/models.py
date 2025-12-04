@@ -37,7 +37,7 @@ class LanguageNode(models.Model):
         db_table = 'language_node'
         constraints = [
             models.CheckConstraint(
-                check=~(Q(nodetype=1) & Q(parentnode=None)),
+                condition=~(Q(nodetype=1) & Q(parentnode=None)),
                 name='dialects should have parentnode'
             ),
         ]
