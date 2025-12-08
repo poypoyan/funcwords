@@ -21,8 +21,9 @@ make migrate
 make static
 # replace "funcwords" with the name of directory where this is located
 docker exec -i funcwords-db-1 psql -U user0 -d Function_Words < ./other/fwphl_triggers.sql
-docker exec -i funcwords-db-1 psql -U user0 -d Function_Words < ./other/tagalog_personal_pronouns.sql   # initial data
 ```
+For data, see [Data Dump](#data-dump) section below.
+
 Note that the "funcwords" in `funcwords-db-1` is the name of the directory of this repo, thus change this appropriately if the directory name is different.
 
 ## A Production Experience
@@ -71,7 +72,7 @@ make django-shell
 ```bash
 docker exec -it funcwords-db-1 psql -d Function_Words -U user0
 ```
-* Want to run Python scripts "from outside" (e.g., to insert data)? [Here](other/volume-mount.md) is a tutorial.
+* Want to insert data or run Python scripts "from outside"? [Here](other/volume-mount.md) is a tutorial.
 
 ## License
 Distributed under the MIT software license. See the accompanying
