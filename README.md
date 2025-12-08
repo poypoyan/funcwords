@@ -20,7 +20,7 @@ make makemigrations-fwapp   # run this once only. afterwards, run 'make makemigr
 make migrate
 make static
 # replace "funcwords" with the name of directory where this is located
-docker exec -i funcwords-db-1 psql -U user0 -d Function_Words < ./other/fwphl_triggers.sql
+docker exec -i funcwords-db-1 psql -U user0 -d Function_Words < ./triggers.sql
 ```
 For data, see [Data Dump](#data-dump) section below.
 

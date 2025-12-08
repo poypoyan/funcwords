@@ -5,17 +5,17 @@ declare
         prev_name varchar(255);
         prev_json jsonb;
         prev_slug varchar(50);
-        unaccented varchar(255);
+        plain_slug varchar(255);
         -- language names are assumed to be unique, so no count variable
 begin
-    unaccented = unaccent(new.Name);
+    plain_slug = lower(regexp_replace(replace(unaccent(new.Name), ' ', '-'), '[^\w-]+', '_', 'g'));
     if new.NodeType = 1 then
         select Name, Slug into prev_name, prev_slug from Language_Node where id = new.ParentNode;
         new.DisplayName = concat(prev_name, ', ', new.Name);
-        new.Slug = concat(prev_slug, '-', lower(regexp_replace(replace(unaccented, ' ', '-'), '[^\w-]+', '_', 'g')));
+        new.Slug = concat(prev_slug, '-', plain_slug);
     else
         new.DisplayName = new.Name;
-        new.Slug = lower(regexp_replace(replace(unaccented, ' ', '-'), '[^\w-]+', '_', 'g'));
+        new.Slug = plain_slug;
     end if;
 
     if new.ParentNode is null then
@@ -34,18 +34,18 @@ declare
     prev_name varchar(255);
     prev_json jsonb;
     prev_slug varchar(50);
-    unaccented varchar(255);
+    plain_slug varchar(255);
     -- language names are assumed to be unique, so no count variable
 begin
     if (new.name is distinct from old.name) or (new.NodeType is distinct from old.NodeType) or (new.ParentNode is distinct from old.ParentNode) then
-        unaccented = unaccent(new.Name);
+        plain_slug = lower(regexp_replace(replace(unaccent(new.Name), ' ', '-'), '[^\w-]+', '_', 'g'));
         if new.NodeType = 1 then
             select Name, Slug into prev_name, prev_slug from Language_Node where id = new.ParentNode;
             new.DisplayName = concat(prev_name, ', ', new.Name);
-            new.Slug = concat(prev_slug, '-', lower(regexp_replace(replace(unaccented, ' ', '-'), '[^\w-]+', '_', 'g')));
+            new.Slug = concat(prev_slug, '-', plain_slug);
         else
             new.DisplayName = new.Name;
-            new.Slug = lower(regexp_replace(replace(unaccented, ' ', '-'), '[^\w-]+', '_', 'g'));
+            new.Slug = plain_slug;
         end if;
     end if;
 
@@ -68,15 +68,15 @@ declare
     prev_dispname varchar(255);
     prev_json jsonb;
     prev_slug varchar(50);
-    unaccented varchar(255);
+    plain_slug varchar(255);
     count int;
 begin
-    unaccented = unaccent(new.Name);
+    plain_slug = lower(regexp_replace(replace(unaccent(new.Name), ' ', '-'), '[^\w-]+', '_', 'g'));
     select count(Id) into count from Property_Node where Name = new.Name;
     if count > 0 then
-        new.Slug = concat(lower(regexp_replace(replace(unaccented, ' ', '-'), '[^\w-]+', '_', 'g')), '-', count + 1);
+        new.Slug = concat(plain_slug, '-', count + 1);
     else
-        new.Slug = lower(regexp_replace(replace(unaccented, ' ', '-'), '[^\w-]+', '_', 'g'));
+        new.Slug = plain_slug;
     end if;
 
     if new.ParentNode is null then
@@ -98,16 +98,16 @@ declare
     prev_dispname varchar(255);
     prev_json jsonb;
     prev_slug varchar(50);
-    unaccented varchar(255);
+    plain_slug varchar(255);
     count int;
 begin
     if new.name is distinct from old.name then
-        unaccented = unaccent(new.Name);
+        plain_slug = lower(regexp_replace(replace(unaccent(new.Name), ' ', '-'), '[^\w-]+', '_', 'g'));
         select count(Id) into count from Property_Node where Name = new.Name;
         if count > 0 then
-            new.Slug = concat(lower(regexp_replace(replace(unaccented, ' ', '-'), '[^\w-]+', '_', 'g')), '-', count + 1);
+            new.Slug = concat(plain_slug, '-', count + 1);
         else
-            new.Slug = lower(regexp_replace(replace(unaccented, ' ', '-'), '[^\w-]+', '_', 'g'));
+            new.Slug = plain_slug;
         end if;
     end if;
 
@@ -129,15 +129,17 @@ $$ language plpgsql;
 create or replace function populate_term_slug_bi() returns trigger as $$
 declare
     unaccented varchar(255);
+    plain_slug varchar(255);
     count int;
 begin
     unaccented = unaccent(new.Name);
+    plain_slug = lower(regexp_replace(replace(unaccented, ' ', '-'), '[^\w-]+', '_', 'g'));
     select count(Id) into count from Term where Language = New.Language and unaccent(Name) = unaccented;
     if count > 0 then
-        new.Slug = concat(lower(regexp_replace(replace(unaccented, ' ', '-'), '[^\w-]+', '_', 'g')), '-', count + 1);
+        new.Slug = concat(plain_slug, '-', count + 1);
         new.LinkName = concat(unaccented, ' (', count + 1, ')');
     else
-        new.Slug = lower(regexp_replace(replace(unaccented, ' ', '-'), '[^\w-]+', '_', 'g'));
+        new.Slug = plain_slug;
         new.LinkName = unaccented;
     end if;
 
@@ -148,16 +150,18 @@ $$ language plpgsql;
 create or replace function populate_term_slug_bu() returns trigger as $$
 declare
     unaccented varchar(255);
+    plain_slug varchar(255);
     count int;
 begin
     if new.Name is distinct from old.Name then
         unaccented = unaccent(new.Name);
-        select count(Id) into count from Term where Language = New.Language and unaccent(Name) = unaccented;
+        plain_slug = lower(regexp_replace(replace(unaccented, ' ', '-'), '[^\w-]+', '_', 'g'));
+        select count(Id) into count from Term where Language = New.Language and unaccent(Name) = unaccented and Id != new.Id;
         if count > 0 then
-            new.Slug = concat(lower(regexp_replace(replace(unaccented, ' ', '-'), '[^\w-]+', '_', 'g')), '-', count + 1);
+            new.Slug = concat(plain_slug, '-', count + 1);
             new.LinkName = concat(unaccented, ' (', count + 1, ')');
         else
-            new.Slug = lower(regexp_replace(replace(unaccented, ' ', '-'), '[^\w-]+', '_', 'g'));
+            new.Slug = plain_slug;
             new.LinkName = unaccented;
         end if;
     end if;
