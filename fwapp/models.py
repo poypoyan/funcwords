@@ -10,7 +10,7 @@ from django.db.models import Q
 
 
 class Reference(models.Model):
-    name = models.CharField(max_length=50, unique=True, help_text='Codename for foreign key INSERT INTO.')
+    name = models.CharField(max_length=100, unique=True, help_text='Codename for foreign key INSERT INTO.')
     info = models.TextField(db_default='', help_text='Kindly URI encode unsafe characters in URLs.')
 
     class Meta:
@@ -23,12 +23,12 @@ class Reference(models.Model):
 class LanguageNode(models.Model):
     # If node is dialect, please set a language as parent.
     # If node is language, please set a group as parent.
-    name = models.CharField(max_length=50, unique=True, help_text='Make this unique. If this is a dialect, don\'t include the language name anymore.')
+    name = models.CharField(max_length=100, unique=True, help_text='Make this unique. If this is a dialect, don\'t include the language name anymore.')
     nodetype = models.SmallIntegerField(help_text='0 = language, 1 = dialect, 2 = group.')
     parentnode = models.ForeignKey('self', models.DO_NOTHING, db_column='parentnode', blank=True, null=True)
     info = models.TextField(blank=True, db_default='')
-    glottolog = models.CharField(max_length=50, blank=True, null=True)
-    displayname = models.CharField(max_length=50)
+    glottolog = models.CharField(max_length=100, blank=True, null=True)
+    displayname = models.CharField(max_length=100)
     displaylinks = models.JSONField()
     refs = models.ManyToManyField(Reference, blank=True, help_text='In page, these are sorted by alphabetical order of Info field.<br/>')
     slug = models.SlugField()
@@ -44,7 +44,7 @@ class LanguageNode(models.Model):
 
 
 class LanguageOtherName(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
     language = models.ForeignKey(LanguageNode, models.CASCADE, db_column='language')
 
     class Meta:
@@ -52,7 +52,7 @@ class LanguageOtherName(models.Model):
 
 
 class PropertyNode(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
     parentnode = models.ForeignKey('self', models.DO_NOTHING, db_column='parentnode', blank=True, null=True)
     info = models.TextField(blank=True, db_default='')
     displayname = models.CharField(max_length=100)
@@ -66,10 +66,10 @@ class PropertyNode(models.Model):
 
 
 class Term(models.Model):
-    name = models.CharField(max_length=50, help_text='Please capitalize and you may add diacritics. This is the header in term page.')
+    name = models.CharField(max_length=100, help_text='Please capitalize and you may add diacritics. This is the header in term page.')
     language = models.ForeignKey(LanguageNode, models.DO_NOTHING, db_column='language')
     info = models.TextField(blank=True, db_default='')
-    linkname = models.CharField(max_length=50)
+    linkname = models.CharField(max_length=100)
     refs = models.ManyToManyField(Reference, blank=True, help_text='In page, these are sorted by alphabetical order of Info field.<br/>')
     slug = models.SlugField()
 
@@ -97,7 +97,7 @@ class MainsContent(models.Model):
     # * cats - Content of categories page
     # * fbconf - JSON config for funcbools
 
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100, unique=True)
     content = models.TextField(blank=True, db_default='')
 
     class Meta:

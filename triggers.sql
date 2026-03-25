@@ -10,12 +10,13 @@ declare
 begin
     plain_slug = lower(regexp_replace(replace(unaccent(new.Name), ' ', '-'), '[^\w-]+', '_', 'g'));
     if new.NodeType = 1 then
+        -- prev is expected to be a language
         select Name, Slug into prev_name, prev_slug from Language_Node where id = new.ParentNode;
         new.DisplayName = concat(prev_name, ', ', new.Name);
-        new.Slug = concat(prev_slug, '-', plain_slug);
+        new.Slug = concat(left(prev_slug, 29), '-', left(plain_slug, 20));
     else
         new.DisplayName = new.Name;
-        new.Slug = plain_slug;
+        new.Slug = left(plain_slug, 50);
     end if;
 
     if new.ParentNode is null then
@@ -40,12 +41,13 @@ begin
     if (new.name is distinct from old.name) or (new.NodeType is distinct from old.NodeType) or (new.ParentNode is distinct from old.ParentNode) then
         plain_slug = lower(regexp_replace(replace(unaccent(new.Name), ' ', '-'), '[^\w-]+', '_', 'g'));
         if new.NodeType = 1 then
+            -- prev is expected to be a language
             select Name, Slug into prev_name, prev_slug from Language_Node where id = new.ParentNode;
             new.DisplayName = concat(prev_name, ', ', new.Name);
-            new.Slug = concat(prev_slug, '-', plain_slug);
+            new.Slug = concat(left(prev_slug, 29), '-', left(plain_slug, 20));
         else
             new.DisplayName = new.Name;
-            new.Slug = plain_slug;
+            new.Slug = left(plain_slug, 50);
         end if;
     end if;
 
@@ -74,9 +76,10 @@ begin
     plain_slug = lower(regexp_replace(replace(unaccent(new.Name), ' ', '-'), '[^\w-]+', '_', 'g'));
     select count(Id) into count from Property_Node where Name = new.Name;
     if count > 0 then
-        new.Slug = concat(plain_slug, '-', count + 1);
+        -- count + 1 is expected to be single digit only
+        new.Slug = concat(left(plain_slug, 48), '-', count + 1);
     else
-        new.Slug = plain_slug;
+        new.Slug = left(plain_slug, 50);
     end if;
 
     if new.ParentNode is null then
@@ -105,9 +108,10 @@ begin
         plain_slug = lower(regexp_replace(replace(unaccent(new.Name), ' ', '-'), '[^\w-]+', '_', 'g'));
         select count(Id) into count from Property_Node where Name = new.Name;
         if count > 0 then
-            new.Slug = concat(plain_slug, '-', count + 1);
+            -- count + 1 is expected to be single digit only
+            new.Slug = concat(left(plain_slug, 48), '-', count + 1);
         else
-            new.Slug = plain_slug;
+            new.Slug = left(plain_slug, 50);
         end if;
     end if;
 
@@ -136,10 +140,11 @@ begin
     plain_slug = lower(regexp_replace(replace(unaccented, ' ', '-'), '[^\w-]+', '_', 'g'));
     select count(Id) into count from Term where Language = New.Language and unaccent(Name) = unaccented;
     if count > 0 then
-        new.Slug = concat(plain_slug, '-', count + 1);
+        -- count + 1 is expected to be single digit only
+        new.Slug = concat(left(plain_slug, 48), '-', count + 1);
         new.LinkName = concat(unaccented, ' (', count + 1, ')');
     else
-        new.Slug = plain_slug;
+        new.Slug = left(plain_slug, 50);
         new.LinkName = unaccented;
     end if;
 
@@ -158,10 +163,11 @@ begin
         plain_slug = lower(regexp_replace(replace(unaccented, ' ', '-'), '[^\w-]+', '_', 'g'));
         select count(Id) into count from Term where Language = New.Language and unaccent(Name) = unaccented and Id != new.Id;
         if count > 0 then
-            new.Slug = concat(plain_slug, '-', count + 1);
+            -- count + 1 is expected to be single digit only
+            new.Slug = concat(left(plain_slug, 48), '-', count + 1);
             new.LinkName = concat(unaccented, ' (', count + 1, ')');
         else
-            new.Slug = plain_slug;
+            new.Slug = left(plain_slug, 50);
             new.LinkName = unaccented;
         end if;
     end if;
