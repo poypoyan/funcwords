@@ -6,12 +6,23 @@ declare
         prev_json jsonb;
         prev_slug varchar(50);
         plain_slug varchar(255);
+        par_nodetype int;
         -- language names are assumed to be unique, so no count variable
 begin
     plain_slug = lower(regexp_replace(replace(unaccent(new.Name), ' ', '-'), '[^\w-]+', '_', 'g'));
-    if new.NodeType = 1 then
-        -- prev is expected to be a language
-        select Name, Slug into prev_name, prev_slug from Language_Node where id = new.ParentNode;
+    if (new.NodeType = 0 or new.NodeType = 2) and new.ParentNode is not null then
+        select NodeType into par_nodetype from Language_Node where id = new.ParentNode;
+        if par_nodetype <> 2 then
+            raise exception 'parent of language or group should be group';
+        end if;
+    elseif new.NodeType = 1 and new.ParentNode is null then
+        raise exception 'dialect should have parent';
+    elseif new.NodeType = 1 and new.ParentNode is not null then
+        select NodeType, DisplayName, Slug into par_nodetype, prev_name, prev_slug from Language_Node where id = new.ParentNode;
+        if par_nodetype = 2 then
+            raise exception 'parent of dialect should not be group';
+        end if;
+
         new.DisplayName = concat(prev_name, ', ', new.Name);
         new.Slug = concat(left(prev_slug, 29), '-', left(plain_slug, 20));
     else
@@ -36,13 +47,24 @@ declare
     prev_json jsonb;
     prev_slug varchar(50);
     plain_slug varchar(255);
+    par_nodetype int;
     -- language names are assumed to be unique, so no count variable
 begin
     if (new.name is distinct from old.name) or (new.NodeType is distinct from old.NodeType) or (new.ParentNode is distinct from old.ParentNode) then
         plain_slug = lower(regexp_replace(replace(unaccent(new.Name), ' ', '-'), '[^\w-]+', '_', 'g'));
-        if new.NodeType = 1 then
-            -- prev is expected to be a language
-            select Name, Slug into prev_name, prev_slug from Language_Node where id = new.ParentNode;
+        if (new.NodeType = 0 or new.NodeType = 2) and new.ParentNode is not null then
+            select NodeType into par_nodetype from Language_Node where id = new.ParentNode;
+            if par_nodetype <> 2 then
+                raise exception 'parent of language or group should be group';
+            end if;
+        elseif new.NodeType = 1 and new.ParentNode is null then
+            raise exception 'dialect should have parent';
+        elseif new.NodeType = 1 and new.ParentNode is not null then
+            select NodeType, DisplayName, Slug into par_nodetype, prev_name, prev_slug from Language_Node where id = new.ParentNode;
+            if par_nodetype = 2 then
+                raise exception 'parent of dialect should not be group';
+            end if;
+
             new.DisplayName = concat(prev_name, ', ', new.Name);
             new.Slug = concat(left(prev_slug, 29), '-', left(plain_slug, 20));
         else
