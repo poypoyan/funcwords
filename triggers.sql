@@ -10,11 +10,16 @@ declare
         -- language names are assumed to be unique, so no count variable
 begin
     plain_slug = lower(regexp_replace(replace(unaccent(new.Name), ' ', '-'), '[^\w-]+', '_', 'g'));
-    if (new.NodeType = 0 or new.NodeType = 2) and new.ParentNode is not null then
-        select NodeType into par_nodetype from Language_Node where id = new.ParentNode;
-        if par_nodetype <> 2 then
-            raise exception 'parent of language or group should be group';
+    if new.NodeType = 0 or new.NodeType = 2 then
+        if new.ParentNode is not null then
+            select NodeType into par_nodetype from Language_Node where id = new.ParentNode;
+            if par_nodetype <> 2 then
+                raise exception 'parent of language or group should be group';
+            end if;
         end if;
+
+        new.DisplayName = new.Name;
+        new.Slug = left(plain_slug, 50);
     elseif new.NodeType = 1 and new.ParentNode is null then
         raise exception 'dialect should have parent';
     elseif new.NodeType = 1 and new.ParentNode is not null then
@@ -26,8 +31,7 @@ begin
         new.DisplayName = concat(prev_name, ', ', new.Name);
         new.Slug = concat(left(prev_slug, 29), '-', left(plain_slug, 20));
     else
-        new.DisplayName = new.Name;
-        new.Slug = left(plain_slug, 50);
+        raise exception 'unrecognized configuration';
     end if;
 
     if new.ParentNode is null then
@@ -52,11 +56,16 @@ declare
 begin
     if (new.name is distinct from old.name) or (new.NodeType is distinct from old.NodeType) or (new.ParentNode is distinct from old.ParentNode) then
         plain_slug = lower(regexp_replace(replace(unaccent(new.Name), ' ', '-'), '[^\w-]+', '_', 'g'));
-        if (new.NodeType = 0 or new.NodeType = 2) and new.ParentNode is not null then
-            select NodeType into par_nodetype from Language_Node where id = new.ParentNode;
-            if par_nodetype <> 2 then
-                raise exception 'parent of language or group should be group';
+        if new.NodeType = 0 or new.NodeType = 2 then
+            if new.ParentNode is not null then
+                select NodeType into par_nodetype from Language_Node where id = new.ParentNode;
+                if par_nodetype <> 2 then
+                    raise exception 'parent of language or group should be group';
+                end if;
             end if;
+
+            new.DisplayName = new.Name;
+            new.Slug = left(plain_slug, 50);
         elseif new.NodeType = 1 and new.ParentNode is null then
             raise exception 'dialect should have parent';
         elseif new.NodeType = 1 and new.ParentNode is not null then
@@ -68,8 +77,7 @@ begin
             new.DisplayName = concat(prev_name, ', ', new.Name);
             new.Slug = concat(left(prev_slug, 29), '-', left(plain_slug, 20));
         else
-            new.DisplayName = new.Name;
-            new.Slug = left(plain_slug, 50);
+            raise exception 'unrecognized configuration';
         end if;
     end if;
 
