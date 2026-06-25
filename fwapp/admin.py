@@ -66,7 +66,7 @@ class LanguageOtherNameAdmin(admin.ModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'language':
-            return ForeignKeyDropDownDisp(queryset=LanguageNode.objects.exclude(nodetype=2).order_by('name'))
+            return ForeignKeyDropDownDisp(queryset=LanguageNode.objects.order_by('name'))
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
