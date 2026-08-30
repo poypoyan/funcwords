@@ -28,7 +28,7 @@ Note that the "funcwords" in `funcwords-db-1` is the name of the directory of th
 
 ## A Production Experience
 1. Grind to have some money (😫) to buy a VPS (ideally Ubuntu with Docker installed) and a domain. Then follow the steps provided by the VPS provider to connect the two.
-2. Modify `.env` with secure values. Set `DEBUG` to False and `DJANGO_ALLOWED_HOSTS` to your domain with dot in the beginning, like `.example.com`. Replace every instance of `example.com` in this repo with your domain.
+2. Modify `.env` with secure values. Set `DEBUG` to False and `DJANGO_ALLOWED_HOSTS` to your domain with dot in the beginning, like `.example.com`. Set `FWAPP_MAIN_URL` to the home URL without the trailing slash like `https://example.com`.
 3. Uncomment the `.env` in `.gitignore`. Do NOT upload prod environment variables anywhere!
 4. (**Update:** I now prefer [pulling from Github](https://github.com/poypoyan/funcwords-gh-actions).) Copy files from local to VPS using rsync:
 ```bash

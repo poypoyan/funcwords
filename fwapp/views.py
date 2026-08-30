@@ -8,12 +8,13 @@ from urllib.parse import urlencode
 from . import models
 from .forms import SearchForm
 from .funcbool import bool_proc, fb_filt
-import random, json
+import random, json, os
 
 
 _PAGE_ENTRIES = 30
 _TRIGRAM_BOUND = 0.2
 _FB_CONF = [None]
+_MAIN_URL = os.getenv('FWAPP_MAIN_URL')
 
 
 def get_mains_content(key: str) -> str:
@@ -35,7 +36,7 @@ def get_fb_conf() -> None:
 
 
 def finalize_context(main: dict) -> dict:
-    return main | { 'sitename': get_mains_content('sitename') }
+    return main | { 'sitename': get_mains_content('sitename'), 'main_url': _MAIN_URL }
 
 
 def error_404(request, exception):

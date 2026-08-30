@@ -10,13 +10,13 @@
     <meta property="og:type" content="website"/>
     <meta property="og:title" content="{{ title }}{% if title %} - {% endif %}{{ sitename }}"/>
     <meta property="og:description" content="{{ description }}"/>
-    <meta property="og:url" content="https://example.com{{ request.path }}"/>
-    <meta property="og:image" content="https://example.com{% static 'rooster.png' %}"/>
-    <link rel="canonical" href="https://example.com{{ request.path }}"/>
+    <meta property="og:url" content="{{ main_url }}{{ request.path }}"/>
+    <meta property="og:image" content="{{ main_url }}{% static 'rooster.png' %}"/>
+    <link rel="canonical" href="{{ main_url }}{{ request.path }}"/>
     <meta name="twitter:card" content="summary"/>
     <meta name="twitter:title" content="{{ title }}{% if title %} - {% endif %}{{ sitename }}"/>
     <meta name="twitter:description" content="{{ description }}"/>
-    <meta name="twitter:image" content="https://example.com{% static 'rooster.png' %}"/>
+    <meta name="twitter:image" content="{{ main_url }}{% static 'rooster.png' %}"/>
     {% else %}
     <meta name="robots" content="noindex, nofollow"/>
     {% endif %}
