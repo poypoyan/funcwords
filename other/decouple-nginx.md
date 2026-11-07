@@ -31,9 +31,17 @@ ufw enable
 ```bash
 cp ./nginx/nginx.conf /etc/nginx/conf.d/
 ```
-4. Remove the default in `sites-enabled` directory and then run nginx:
+4. Edit the main config `/etc/nginx/nginx.conf`: Comment out the `server_tokens` line inside the `http` block because this is already configured in our config file. Then the `events` block should be configured to:
+```
+worker_connections 2048;
+use epoll;
+multi_accept on;
+```
+5. Remove the default in `sites-enabled` directory and then run nginx:
 ```bash
 unlink /etc/nginx/sites-enabled/default
 systemctl start nginx
 ```
-5. Do the Docker setup.
+You may test nginx before running it through the command `nginx -t`.
+
+6. Do the Docker setup.
