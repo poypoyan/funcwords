@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from django.contrib.postgres.search import TrigramSimilarity
-from django.db.models import Q
+from django.db.models import Q, Case, Value, When
 from django.db.models.functions import Greatest
 from django.http import Http404
 from urllib.parse import urlencode
@@ -181,7 +181,12 @@ def term_other(request, lang, term):
             terms_query = terms_query.filter(or_clause)
             conds_disp += or_disp + ')'
 
-    terms_query = terms_query.order_by('linkname')
+    terms_query = terms_query.alias(
+            is_same_lang = Case(
+                When(language=lang_query['id'], then=Value(1)),
+                default=Value(0)
+            )
+        ).order_by('-is_same_lang', 'linkname')
     terms_ct = terms_query.count()
 
     paginator = Paginator(terms_query, _PAGE_ENTRIES)
@@ -277,11 +282,10 @@ def search(request):
     searched = form.cleaned_data['q']
     if form.cleaned_data['t'] == 'term':
         # linkname is already unaccented
-        results = models.Term.objects.values('linkname', 'slug', 'language__displayname', 'language__slug').annotate(
+        results = models.Term.objects.values('linkname', 'slug', 'language__displayname', 'language__slug').alias(
                 similarity=TrigramSimilarity('linkname', searched)
             ).filter(
                 Q(similarity__gt=_TRIGRAM_BOUND) | Q(linkname__icontains=searched)
-            ).annotate(similarity=TrigramSimilarity('linkname', searched)
             ).order_by('-similarity', 'linkname')
     elif form.cleaned_data['t'] == 'language':
         results = models.LanguageNode.objects.values('displayname', 'slug').alias(
@@ -290,7 +294,7 @@ def search(request):
                 Q(similarity__gt=_TRIGRAM_BOUND) | Q(displayname__unaccent__icontains=searched) | Q(languageothername__name__unaccent__icontains=searched)
             ).order_by('displayname').distinct()
     elif form.cleaned_data['t'] == 'category':
-        results = models.PropertyNode.objects.values('displayname', 'slug').annotate(
+        results = models.PropertyNode.objects.values('displayname', 'slug').alias(
                 similarity=TrigramSimilarity('displayname__unaccent', searched)
             ).filter(
                 Q(similarity__gt=_TRIGRAM_BOUND) | Q(displayname__unaccent__icontains=searched)
